@@ -54,4 +54,26 @@ namespace TestTokenizer {
 
         require(testOutput == expectedOutput);
     }
+
+    TEST_CASE("CheckTokenizeMultilineProgram") {
+        string testInput = "procedure echo {\n read num1;\n index = 1001;\n print index;\n print num1;\n}";
+
+        Tokenizer tk;
+        vector<string> tokens;
+        tk.tokenize(testInput, tokens);
+
+        string testOutput;
+        for (unsigned int i = 0; i < tokens.size(); i++) {
+            if (tokens.at(i) == "\n") {
+                testOutput.append("\\n$"); // Representing newline character in the string
+            } else {
+                testOutput.append(tokens.at(i) + "$");
+            }
+        }
+
+        string expectedOutput = "procedure$echo${$\\n$read$num1$;$\\n$index$=$1001$;$\\n$print$index$;$\\n$print$num1$;$\\n$}$";
+
+        require(testOutput == expectedOutput);
+    }
+
 }

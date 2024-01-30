@@ -57,6 +57,10 @@ void Tokenizer::tokenize(string text, vector<string>& tokens) {
 			tokens.push_back(token);
 			token.clear();
 		}
+        else if (ch == '\n') { // handle line breaks
+            tokens.push_back("\n");
+            i++;
+        }
 		else if (!isspace(ch)) { // scan for punctuations
 			token.push_back(ch);
 			i++;

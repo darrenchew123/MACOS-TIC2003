@@ -78,8 +78,8 @@ namespace TestDatabase {
 
     TEST_CASE("CheckDatabaseConstants") {
         Database::initialize();
-        Database::insertConstant(1, 100);
-        Database::insertConstant(2, 200);
+        Database::insertConstant(100);
+        Database::insertConstant(200);
 
         vector<string> dbResults;
         Database::getConstants(dbResults);
@@ -89,7 +89,7 @@ namespace TestDatabase {
             testOutput.append(constant + "$");
         }
 
-        string expectedOutput = "Constant ID: 1, Value: 100$Constant ID: 2, Value: 200$";
+        string expectedOutput = "Constant Value: 100$Constant Value: 200$";
 
         require(testOutput == expectedOutput);
     }

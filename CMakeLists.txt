@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.20.2)
-project (autotester)
+project (MACOS-TIC2003)
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 message (STATUS "${PROJECT_SOURCE_DIR} ${PROJECT_BINARY_DIR}")

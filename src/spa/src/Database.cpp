@@ -77,6 +77,74 @@ void Database::getProcedures(vector<string>& results){
 	}
 }
 
+void Database::insertStatement(string procedureName, string statementType, string statementContent, int codeLine) {
+    string insertStatementSQL = "INSERT INTO Statement (codeLine, procedureName, statementType, statementContent) VALUES ("
+                                + to_string(codeLine) + ", '"
+                                + procedureName + "', '"
+                                + statementType + "', '"
+                                + statementContent + "');";
+    sqlite3_exec(dbConnection, insertStatementSQL.c_str(), NULL, 0, &errorMessage);
+}
+
+// method to get all the statements from the database
+void Database::getStatements(vector<string>& results) {
+    dbResults.clear();  // Clear existing results
+
+    string getStatementsSQL = "SELECT * FROM Statement;";
+    sqlite3_exec(dbConnection, getStatementsSQL.c_str(), callback, 0, &errorMessage);
+
+    for (vector<string> dbRow : dbResults) {
+        string statement = "Code Line: " + dbRow.at(0) + ", Procedure: " + dbRow.at(1)
+                           + ", Type: " + dbRow.at(2) + ", Content: " + dbRow.at(3);
+        results.push_back(statement);
+    }
+}
+
+// method to insert a variable into the database
+void Database::insertVariable(string variableName, int codeLine) {
+    string insertVariableSQL = "INSERT INTO Variable (variableName, codeLine) VALUES ('"
+                               + variableName + "', '"
+                               + to_string(codeLine) + "');";
+    sqlite3_exec(dbConnection, insertVariableSQL.c_str(), NULL, 0, &errorMessage);
+}
+
+// method to get all the variables from the database
+void Database::getVariables(vector<string>& results) {
+    dbResults.clear();  // Clear existing results
+
+    string getVariablesSQL = "SELECT * FROM Variable;";
+    sqlite3_exec(dbConnection, getVariablesSQL.c_str(), callback, 0, &errorMessage);
+
+    for (vector<string> dbRow : dbResults) {
+        string variable = "Variable Name: " + dbRow.at(0) + ", Code Line: " + dbRow.at(1);
+        results.push_back(variable);
+    }
+}
+
+
+// method to insert a constant into the database
+void Database::insertConstant(int constantId, int constantValue) {
+    string insertConstantSQL = "INSERT INTO Constant (constantId, constantValue) VALUES ("
+                               + to_string(constantId) + ", "
+                               + to_string(constantValue) + ");";
+    sqlite3_exec(dbConnection, insertConstantSQL.c_str(), NULL, 0, &errorMessage);
+}
+
+// method to get all the constants from the database
+void Database::getConstants(vector<string>& results) {
+    dbResults.clear();  // Clear existing results
+
+    string getConstantsSQL = "SELECT * FROM Constant;";
+    sqlite3_exec(dbConnection, getConstantsSQL.c_str(), callback, 0, &errorMessage);
+
+    for (vector<string> dbRow : dbResults) {
+        string constant = "Constant ID: " + dbRow.at(0) + ", Value: " + dbRow.at(1);
+        results.push_back(constant);
+    }
+}
+
+
+
 // callback method to put one row of results from the database into the dbResults vector
 // This method is called each time a row of results is returned from the database
 int Database::callback(void* NotUsed, int argc, char** argv, char** azColName) {

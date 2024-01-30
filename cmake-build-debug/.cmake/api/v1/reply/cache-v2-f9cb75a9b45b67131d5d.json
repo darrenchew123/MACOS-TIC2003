@@ -843,7 +843,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "autotester"
+			"value" : "MACOS-TIC2003"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -1136,6 +1136,42 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "[debug;/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/lib/autotester/apple/debug/libautotester.a;optimized;/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/lib/autotester/apple/release/libautotester.a][v()]"
+		},
+		{
+			"name" : "MACOS-TIC2003_BINARY_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug"
+		},
+		{
+			"name" : "MACOS-TIC2003_IS_TOP_LEVEL",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "ON"
+		},
+		{
+			"name" : "MACOS-TIC2003_SOURCE_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Value Computed by CMake"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003"
 		},
 		{
 			"name" : "autotester_BINARY_DIR",

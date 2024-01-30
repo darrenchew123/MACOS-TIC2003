@@ -55,7 +55,7 @@ void Database::close() {
 
 // method to insert a procedure into the database
 void Database::insertProcedure(string procedureName) {
-	string insertProcedureSQL = "INSERT INTO procedures ('procedureName') VALUES ('" + procedureName + "');";
+	string insertProcedureSQL = "INSERT INTO Procedure ('procedureName') VALUES ('" + procedureName + "');";
 	sqlite3_exec(dbConnection, insertProcedureSQL.c_str(), NULL, 0, &errorMessage);
 }
 
@@ -66,7 +66,7 @@ void Database::getProcedures(vector<string>& results){
 
 	// retrieve the procedures from the procedure table
 	// The callback method is only used when there are results to be returned.
-	string getProceduresSQL = "SELECT * FROM procedures;";
+	string getProceduresSQL = "SELECT * FROM Procedure;";
 	sqlite3_exec(dbConnection, getProceduresSQL.c_str(), callback, 0, &errorMessage);
 
 	// postprocess the results from the database so that the output is just a vector of procedure names

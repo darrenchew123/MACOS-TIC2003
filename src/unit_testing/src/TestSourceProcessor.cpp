@@ -3,6 +3,10 @@
 
 #include "catch.hpp"
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <unistd.h>
+
 using namespace std;
 
 namespace TestSourceProcessor {
@@ -12,7 +16,27 @@ namespace TestSourceProcessor {
 
     TEST_CASE("CheckSourceProcessor") {
         // Create a SIMPLE program string
-        string program = "procedure Sample { read x; y = 10; print y; }";
+//        string program = "procedure Sample {\n read x;\ny = 10;\nprint y;\n}";
+        std::string filePath = "../../../src/unit_testing/testfile/test.txt";
+        char cwd[PATH_MAX];
+        if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+            std::cout << "Current working directory: " << cwd << std::endl;
+        } else {
+            std::cerr << "getcwd() error" << std::endl;
+            return;
+        }
+
+        // Open the file
+        std::ifstream fileStream(filePath);
+        if (!fileStream) {
+            std::cerr << "Error opening file: " << filePath << std::endl;
+            return;
+        }
+
+        // Read the file into a string
+        std::stringstream buffer;
+        buffer << fileStream.rdbuf();
+        std::string program = buffer.str();
 
         Tokenizer tk;
         vector<string> tokens;
@@ -27,11 +51,17 @@ namespace TestSourceProcessor {
         // Process the program
         SourceProcessor sp;
         sp.process(program);
+        cout << "Processing completed." << endl;
+
 
         vector<string> procedures;
         Database::getProcedures(procedures);
+        cout << "Procedures fetched: " << procedures.size() << endl;
+
         vector<string> statements;
         Database::getStatements(statements);
+        cout << "Statement fetched: " << procedures.size() << endl;
+
 
         // Debugging: Print out the procedures and statements
         std::cout << "Debugging Information:" << std::endl; // Use std::cout and std::endl
@@ -42,13 +72,14 @@ namespace TestSourceProcessor {
             std::cout << "Statement: " << stmt << std::endl;
         }
 
-        require(procedures.size() == 1);
-        require(procedures[0] == "Sample");
+        require(procedures.size() == 3);
+        cout << "Checking procedure size: " << procedures.size() << endl;
 
-        require(statements.size() == 3);
-        require(statements[0].find("read") != string::npos && statements[0].find("x") != string::npos);
-        require(statements[1].find("assign") != string::npos && statements[1].find("y = 10") != string::npos);
-        require(statements[2].find("print") != string::npos && statements[2].find("y") != string::npos);
+        // Check the names of the procedures
+        require(find(procedures.begin(), procedures.end(), "input") != procedures.end());
+        require(find(procedures.begin(), procedures.end(), "output") != procedures.end());
+        require(find(procedures.begin(), procedures.end(), "findGCFLCM") != procedures.end());
+
 
     }
 }

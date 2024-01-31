@@ -1,0 +1,19 @@
+  procedure input{
+	read num1;
+	read num2;
+  }
+
+  procedure output{
+	print num1;
+	print num2;
+	print GCF;
+	print LCM;
+  }
+
+  procedure findGCFLCM{
+	x = num1;
+	y = num2;
+	GCF = 0;
+	LCM = 0;
+	temp = 0;
+  }

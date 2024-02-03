@@ -49,31 +49,31 @@ void Database::initialize() {
 
 // method to close the database connection
 void Database::close() {
-	sqlite3_close(dbConnection);
+    sqlite3_close(dbConnection);
 }
 
 // method to insert a procedure into the database
 void Database::insertProcedure(string procedureName) {
-	string insertProcedureSQL = "INSERT INTO Procedure ('procedureName') VALUES ('" + procedureName + "');";
-	sqlite3_exec(dbConnection, insertProcedureSQL.c_str(), NULL, 0, &errorMessage);
+    string insertProcedureSQL = "INSERT INTO Procedure ('procedureName') VALUES ('" + procedureName + "');";
+    sqlite3_exec(dbConnection, insertProcedureSQL.c_str(), NULL, 0, &errorMessage);
 }
 
 // method to get all the procedures from the database
 void Database::getProcedures(vector<string>& results){
-	// clear the existing results
-	dbResults.clear();
+    // clear the existing results
+    dbResults.clear();
 
-	// retrieve the procedures from the procedure table
-	// The callback method is only used when there are results to be returned.
-	string getProceduresSQL = "SELECT * FROM Procedure;";
-	sqlite3_exec(dbConnection, getProceduresSQL.c_str(), callback, 0, &errorMessage);
+    // retrieve the procedures from the procedure table
+    // The callback method is only used when there are results to be returned.
+    string getProceduresSQL = "SELECT * FROM Procedure;";
+    sqlite3_exec(dbConnection, getProceduresSQL.c_str(), callback, 0, &errorMessage);
 
-	// postprocess the results from the database so that the output is just a vector of procedure names
-	for (vector<string> dbRow : dbResults) {
-		string result;
-		result = dbRow.at(0);
-		results.push_back(result);
-	}
+    // postprocess the results from the database so that the output is just a vector of procedure names
+    for (vector<string> dbRow : dbResults) {
+        string result;
+        result = dbRow.at(0);
+        results.push_back(result);
+    }
 }
 
 void Database::insertStatement(string procedureName, string statementType, string statementContent, int codeLine) {
@@ -146,18 +146,18 @@ void Database::getConstants(vector<string>& results) {
 // callback method to put one row of results from the database into the dbResults vector
 // This method is called each time a row of results is returned from the database
 int Database::callback(void* NotUsed, int argc, char** argv, char** azColName) {
-	NotUsed = 0;
-	vector<string> dbRow;
+    NotUsed = 0;
+    vector<string> dbRow;
 
-	// argc is the number of columns for this row of results
-	// argv contains the values for the columns
-	// Each value is pushed into a vector.
-	for (int i = 0; i < argc; i++) {
-		dbRow.push_back(argv[i]);
-	}
+    // argc is the number of columns for this row of results
+    // argv contains the values for the columns
+    // Each value is pushed into a vector.
+    for (int i = 0; i < argc; i++) {
+        dbRow.push_back(argv[i]);
+    }
 
-	// The row is pushed to the vector for storing all rows of results 
-	dbResults.push_back(dbRow);
+    // The row is pushed to the vector for storing all rows of results
+    dbResults.push_back(dbRow);
 
-	return 0;
+    return 0;
 }

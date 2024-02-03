@@ -15,8 +15,7 @@ namespace TestSourceProcessor {
     }
 
     TEST_CASE("CheckSourceProcessor") {
-        // Create a SIMPLE program string
-//        string program = "procedure Sample {\n read x;\ny = 10;\nprint y;\n}";
+//         Create a SIMPLE program string
         std::string filePath = "../../../src/unit_testing/testfile/test.txt";
         char cwd[PATH_MAX];
         if (getcwd(cwd, sizeof(cwd)) != nullptr) {
@@ -37,7 +36,13 @@ namespace TestSourceProcessor {
         std::stringstream buffer;
         buffer << fileStream.rdbuf();
         std::string program = buffer.str();
-
+//        string program = "procedure echo {\n"
+//                         "    read num1;\n"
+//                         "    index = num1;\n"
+//                         "\n"
+//                         "    print num1;\n"
+//                         "    print index;\n"
+//                         "}";
         Tokenizer tk;
         vector<string> tokens;
         tk.tokenize(program, tokens);

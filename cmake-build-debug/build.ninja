@@ -228,6 +228,13 @@ build src/unit_testing/CMakeFiles/unit_testing.dir/src/TestDatabase.cpp.o: CXX_C
   OBJECT_DIR = src/unit_testing/CMakeFiles/unit_testing.dir
   OBJECT_FILE_DIR = src/unit_testing/CMakeFiles/unit_testing.dir/src
 
+build src/unit_testing/CMakeFiles/unit_testing.dir/src/TestQueryProcessor.cpp.o: CXX_COMPILER__unit_testing_unscanned_ /Users/chewd1/Downloads/MAC_M1_StartupSPASolution$ 2/A0123456Y/MACOS-TIC2003/src/unit_testing/src/TestQueryProcessor.cpp || cmake_object_order_depends_target_unit_testing
+  DEP_FILE = src/unit_testing/CMakeFiles/unit_testing.dir/src/TestQueryProcessor.cpp.o.d
+  FLAGS = -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
+  INCLUDES = -I"/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/lib" -I"/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/src/spa/src"
+  OBJECT_DIR = src/unit_testing/CMakeFiles/unit_testing.dir
+  OBJECT_FILE_DIR = src/unit_testing/CMakeFiles/unit_testing.dir/src
+
 build src/unit_testing/CMakeFiles/unit_testing.dir/src/TestSourceProcessor.cpp.o: CXX_COMPILER__unit_testing_unscanned_ /Users/chewd1/Downloads/MAC_M1_StartupSPASolution$ 2/A0123456Y/MACOS-TIC2003/src/unit_testing/src/TestSourceProcessor.cpp || cmake_object_order_depends_target_unit_testing
   DEP_FILE = src/unit_testing/CMakeFiles/unit_testing.dir/src/TestSourceProcessor.cpp.o.d
   FLAGS = -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
@@ -257,7 +264,7 @@ build src/unit_testing/CMakeFiles/unit_testing.dir/src/main.cpp.o: CXX_COMPILER_
 #############################################
 # Link the executable src/unit_testing/unit_testing
 
-build src/unit_testing/unit_testing: CXX_EXECUTABLE_LINKER__unit_testing_ src/unit_testing/CMakeFiles/unit_testing.dir/src/TestDatabase.cpp.o src/unit_testing/CMakeFiles/unit_testing.dir/src/TestSourceProcessor.cpp.o src/unit_testing/CMakeFiles/unit_testing.dir/src/TestTokenzier.cpp.o src/unit_testing/CMakeFiles/unit_testing.dir/src/main.cpp.o | src/spa/libspa.a || src/spa/libspa.a
+build src/unit_testing/unit_testing: CXX_EXECUTABLE_LINKER__unit_testing_ src/unit_testing/CMakeFiles/unit_testing.dir/src/TestDatabase.cpp.o src/unit_testing/CMakeFiles/unit_testing.dir/src/TestQueryProcessor.cpp.o src/unit_testing/CMakeFiles/unit_testing.dir/src/TestSourceProcessor.cpp.o src/unit_testing/CMakeFiles/unit_testing.dir/src/TestTokenzier.cpp.o src/unit_testing/CMakeFiles/unit_testing.dir/src/main.cpp.o | src/spa/libspa.a || src/spa/libspa.a
   FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -mmacosx-version-min=13.6
   LINK_LIBRARIES = src/spa/libspa.a
   OBJECT_DIR = src/unit_testing/CMakeFiles/unit_testing.dir

@@ -12,62 +12,62 @@ QueryProcessor::~QueryProcessor() {}
 // using some highly simplified logic.
 // You should modify this method to complete the logic for handling all required queries.
 void QueryProcessor::evaluate(string query, vector<string>& output) {
-	// clear the output vector
-	output.clear();
+    // clear the output vector
+    output.clear();
 
-	// tokenize the query
-	Tokenizer tk;
-	vector<string> tokens;
-	tk.tokenize(query, tokens);
+    // tokenize the query
+    Tokenizer tk;
+    vector<string> tokens;
+    tk.tokenize(query, tokens);
 
-	// create a vector for storing the results from database
-	vector<string> databaseResults;
+    // create a vector for storing the results from database
+    vector<string> databaseResults;
 
-	//Process each token, check its type and get from its respective database
-	for (int i = 0; i < tokens.size(); i++) {
+    //Process each token, check its type and get from its respective database
+    for (int i = 0; i < tokens.size(); i++) {
 
-		string synonymType = tokens[i];
+        string synonymType = tokens[i];
 
-		//check for a procedure
-		if (synonymType == "procedure") {
+        //check for a procedure
+        if (synonymType == "procedure") {
 
-			Database::getProcedures(databaseResults);
-		}
+            Database::getProcedures(databaseResults);
+        }
 
-		//check for a read statement
-		else if (synonymType == "read") {
+            //check for a read statement
+        else if (synonymType == "read") {
 
-			//Database::getProcedures(databaseResults);
-		}
+            //Database::getProcedures(databaseResults);
+        }
 
-		//check for a call statement
-		else if (synonymType == "call") {
+            //check for a call statement
+        else if (synonymType == "call") {
 
-			//Database::getProcedures(databaseResults);
-		}
+            //Database::getProcedures(databaseResults);
+        }
 
-		//check for a print statement
-		else if (synonymType == "print") {
+            //check for a print statement
+        else if (synonymType == "print") {
 
-			//Database::getProcedures(databaseResults);
-		}
+            //Database::getProcedures(databaseResults);
+        }
 
-		//check for a constant
-		else if (synonymType == "constant") {
+            //check for a constant
+        else if (synonymType == "constant") {
 
-			//Database::getProcedures(databaseResults);
-		}
-		
-		//check for variable
+            //Database::getProcedures(databaseResults);
+        }
 
-		//check for assigment
+        //check for variable
 
-		//check for statement
+        //check for assigment
 
-	}
+        //check for statement
 
-	// post process the results to fill in the output vector
-	for (string databaseResult : databaseResults) {
-		output.push_back(databaseResult);
-	}
+    }
+
+    // post process the results to fill in the output vector
+    for (string databaseResult : databaseResults) {
+        output.push_back(databaseResult);
+    }
 }

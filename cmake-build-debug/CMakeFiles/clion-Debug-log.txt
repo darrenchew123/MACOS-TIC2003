@@ -19,6 +19,6 @@ Call Stack (most recent call first):
   CMakeLists.txt:39 (find_package)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
--- Configuring done (0.0s)
+-- Configuring done (0.1s)
 -- Generating done (0.0s)
 -- Build files have been written to: /Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug

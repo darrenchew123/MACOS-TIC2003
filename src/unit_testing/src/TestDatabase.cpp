@@ -1,5 +1,6 @@
 
 #include "Database.h"
+#include<iostream>
 
 #include "catch.hpp"
 using namespace std;
@@ -68,11 +69,11 @@ namespace TestDatabase {
 
         string testOutput;
         for (const auto& variable : dbResults) {
-            testOutput.append(variable + "$");
+            testOutput.append(variable + ",");
         }
 
-        string expectedOutput = "Variable Name: var1, Code Line: 1$Variable Name: var2, Code Line: 2$";
-
+        string expectedOutput = "var1,var2,";
+        cout << testOutput << endl;
         require(testOutput == expectedOutput);
     }
 

@@ -1,32 +1,32 @@
 1 - Procedure
 procedure p;
 Select p
-addAndMultiply
+trackTemperature
 5000
 2 - Variable
 variable v;
 Select v
-num1, num2, multiplier, sum, result
+currentTemp, recordedTemp, defaultSetting
 5000
 3 - Constant
 constant c;
 Select c
-4
+3
 5000
 4 - Assignment
 assign a;
 Select a
-4, 5
+2, 3
 5000
 5 - Print
 print pr;
 Select pr
-6
+4, 5, 6
 5000
 6 - Read
 read rd;
 Select rd
-1, 2, 3
+1
 5000
 7 - Statement
 stmt s;

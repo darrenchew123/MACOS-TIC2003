@@ -85,6 +85,154 @@ namespace TestSourceProcessor {
         require(find(procedures.begin(), procedures.end(), "output") != procedures.end());
         require(find(procedures.begin(), procedures.end(), "findGCFLCM") != procedures.end());
 
-
     }
+    TEST_CASE("TestVariableInsertion") {
+        string program = "procedure testProcedure {\n"
+                         "    read x;\n"
+                         "    y = 5;\n"
+                         "    print y;\n"
+                         "}";
+        SourceProcessor sp;
+        sp.process(program);
+
+        vector<string> variables;
+        Database::getVariables(variables);
+        cout << "Variables fetched: " << variables.size() << endl;
+
+        // Check the number of variables inserted
+        require(variables.size() == 2);
+
+        for (const auto& variable : variables) {
+            std::cout << variable << endl;
+        }
+
+        // Check the presence of specific variables
+        require(find(variables.begin(), variables.end(), "x") != variables.end());
+        require(find(variables.begin(), variables.end(), "y") != variables.end());
+
+        cout << "Variable insertion test passed." << endl;
+    }
+
+    TEST_CASE("TestConstantInsertion") {
+        string program = "procedure calculate {\n"
+                         "    constValue = 10;\n"
+                         "    const2 = 123;\n"
+                         "}";
+        SourceProcessor sp;
+        sp.process(program);
+
+        vector<string> constants;
+        Database::getConstants(constants); // Assuming getConstants() returns all constants' values
+        for (const auto& constant : constants) {
+            std::cout <<"Constant Line: " << constant << endl;
+        }
+        // Check the number of constants inserted
+        require(constants.size() == 2);
+
+
+        // Check the value of the constant
+        require(constants[0] == "1");
+        require(constants[1] == "2");
+
+        cout << "Constant insertion test passed." << endl;
+    }
+
+    TEST_CASE("TestStatementInsertion") {
+        string program = "procedure actions {\n"
+                         "    read inputValue;\n"
+                         "    print result;\n"
+                         "}";
+        SourceProcessor sp;
+        sp.process(program);
+
+        vector<string> statements;
+        Database::getStatements(statements); // Assuming this method returns all statement strings
+
+        for (const auto& statement : statements) {
+            std::cout <<"Statement: " << statement << endl;
+        }
+        // Check the number of statements inserted
+        require(statements.size() == 2);
+
+        // Check for specific statement types
+        require(find(statements.begin(), statements.end(), "1") != statements.end());
+        require(find(statements.begin(), statements.end(), "2") != statements.end());
+
+        cout << "Statement insertion test passed." << endl;
+    }
+
+    TEST_CASE("TestReadPrint") {
+        string program = "procedure sample {\n"
+                         "    read num1;\n"
+                         "    print num2;\n"
+                         "    print num1;\n"
+                         "    read num2;\n"
+                         "}";
+        SourceProcessor sp;
+        sp.process(program);
+
+        vector<string> readLines;
+        vector<string> printLines;
+        Database::getStatementType("read", readLines);
+        Database::getStatementType("print", printLines);
+
+        for (const auto& readLine : readLines) {
+            std::cout <<"Read Line: " << readLine << endl;
+        }
+        for (const auto& printLine : printLines) {
+            std::cout <<"Print Line: " << printLine << endl;
+        }
+
+        // Check the presence of variable in procedure
+        require(readLines.size() == 2);
+        require(printLines.size() == 2);
+        require(readLines[0] == "1");
+        require(readLines[1] == "4");
+        require(printLines[0] == "2");
+        require(printLines[1] == "3");
+
+        cout << "TestReadPrint test passed." << endl;
+    }
+
+    TEST_CASE("TestAssignmentAndPrintOperations") {
+        string program = "procedure echo {\n"
+                         "    read num1;\n"
+                         "    index = num1;\n"
+                         "\n"
+                         "    print num1;\n"
+                         "    print index;\n"
+                         "}";
+        SourceProcessor sp;
+        sp.process(program);
+
+        vector<string> variables;
+        Database::getVariables(variables);
+
+        for (const auto& variable : variables) {
+            std::cout <<"variables "<< variable << endl;
+        }
+        require(find(variables.begin(), variables.end(), "num1") != variables.end());
+        require(find(variables.begin(), variables.end(), "index") != variables.end());
+
+        vector<string> printLines;
+        Database::getStatementType("print", printLines);
+
+        for (const auto& printLine : printLines) {
+            std::cout <<"print lines:  "<< printLine << endl;
+        }
+        require(printLines[0] == "3");
+        require(printLines[1] == "4");
+
+        vector<string> assignmentLines;
+        Database::getStatementType("assign", assignmentLines);
+        for (const auto& assignmentLine : assignmentLines) {
+            std::cout <<"assignment lines:  "<< assignmentLine << endl;
+        }
+        require(printLines[0] == "2");
+
+        cout << "Assignment and print operations test passed." << endl;
+    }
+
+
+
 }

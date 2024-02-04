@@ -79,8 +79,8 @@ namespace TestDatabase {
 
     TEST_CASE("CheckDatabaseConstants") {
         Database::initialize();
-        Database::insertConstant(100);
-        Database::insertConstant(200);
+        Database::insertConstant(1,100);
+        Database::insertConstant(2,200);
 
         vector<string> dbResults;
         Database::getConstants(dbResults);

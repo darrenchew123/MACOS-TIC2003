@@ -1,7 +1,11 @@
-procedure echo {
+procedure addAndMultiply {
     read num1;
-    index = num1;
+    read multiplier;
 
-    print num1;
-    print index;
+    num2 = 1;
+
+    sum = num1 + 1;
+    result = sum * multiplier;
+
+    print sum;
 }

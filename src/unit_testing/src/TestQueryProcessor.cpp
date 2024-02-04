@@ -1,73 +1,64 @@
+#include "catch.hpp"
 #include "QueryProcessor.h"
 #include "Tokenizer.h"
 
-// constructor
-QueryProcessor::QueryProcessor() {}
+TEST_CASE("QueryProcessor Type Validation") {
+    QueryProcessor qp;
+    REQUIRE(qp.typeValidator("procedure") == true);
+    REQUIRE(qp.typeValidator("variable") == true);
+    REQUIRE(qp.typeValidator("constant") == true);
+    REQUIRE(qp.typeValidator("assign") == true);
+    REQUIRE(qp.typeValidator("print") == true);
+    REQUIRE(qp.typeValidator("read") == true);
+    REQUIRE(qp.typeValidator("stmt") == true);
+    REQUIRE(qp.typeValidator("nonexistentType") == false);
+}
 
-// destructor
-QueryProcessor::~QueryProcessor() {}
+TEST_CASE("QueryProcessor Declaration Processing") {
+    QueryProcessor qp;
+    vector<string> tokens = {"procedure", "p", ";", "variable", "v", ";"};
+    unordered_map<string, string> declaredObjects;
+    qp.processObjects(tokens, declaredObjects);
 
-// method to evaluate a query
-// This method currently only handles queries for getting all the procedure names,
-// using some highly simplified logic.
-// You should modify this method to complete the logic for handling all required queries.
-void QueryProcessor::evaluate(string query, vector<string>& output) {
-    // clear the output vector
-    output.clear();
+    REQUIRE(declaredObjects.size() == 2);
+    REQUIRE(declaredObjects["p"] == "procedure");
+    REQUIRE(declaredObjects["v"] == "variable");
+}
 
-    // tokenize the query
+TEST_CASE("QueryProcessor Select Processing") {
+    QueryProcessor qp;
+    vector<string> tokens = {"Select", "p"};
+    vector<pair<string, string>> selectObjects;
+    unordered_map<string, string> declaredObjects = {{"p", "procedure"}};
+
+    qp.processSelect(tokens, declaredObjects, selectObjects);
+
+    REQUIRE(selectObjects.size() == 1);
+    REQUIRE(selectObjects[0] == std::make_pair(std::string("procedure"), std::string("p")));
+}
+
+TEST_CASE("QueryProcessor Invalid Select") {
+    QueryProcessor qp;
+    vector<string> tokens = {"Select", "undefined"};
+    vector<pair<string, string>> selectObjects;
+    unordered_map<string, string> declaredObjects = {{"p", "procedure"}};
+
+    REQUIRE_THROWS_AS(qp.processSelect(tokens, declaredObjects, selectObjects), runtime_error);
+}
+
+TEST_CASE("QueryProcessor Full Parsing") {
+    QueryProcessor qp;
+    string query = "procedure p; variable v; Select p";
+    vector<string> output;
+    vector<pair<string, string>> selectObjects;
     Tokenizer tk;
     vector<string> tokens;
     tk.tokenize(query, tokens);
 
-    // create a vector for storing the results from database
-    vector<string> databaseResults;
+    qp.parser(tokens, selectObjects);
 
-    //Process each token, check its type and get from its respective database
-    for (int i = 0; i < tokens.size(); i++) {
+    REQUIRE(selectObjects.size() == 1);
 
-        string synonymType = tokens[i];
-
-        //check for a procedure
-        if (synonymType == "procedure") {
-
-            Database::getProcedures(databaseResults);
-        }
-
-            //check for a read statement
-        else if (synonymType == "read") {
-
-            //Database::getProcedures(databaseResults);
-        }
-
-            //check for a call statement
-        else if (synonymType == "call") {
-
-            //Database::getProcedures(databaseResults);
-        }
-
-            //check for a print statement
-        else if (synonymType == "print") {
-
-            //Database::getProcedures(databaseResults);
-        }
-
-            //check for a constant
-        else if (synonymType == "constant") {
-
-            //Database::getProcedures(databaseResults);
-        }
-
-        //check for variable
-
-        //check for assigment
-
-        //check for statement
-
-    }
-
-    // post process the results to fill in the output vector
-    for (string databaseResult : databaseResults) {
-        output.push_back(databaseResult);
-    }
+    REQUIRE(selectObjects[0] == std::make_pair(std::string("procedure"), std::string("p")));
 }
+

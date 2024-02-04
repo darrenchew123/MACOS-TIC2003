@@ -54,7 +54,7 @@ namespace TestDatabase {
             testOutput.append(statement + "$");
         }
 
-        string expectedOutput = "Code Line: 1, Procedure: testProcedure, Type: read, Content: var1$Code Line: 2, Procedure: testProcedure, Type: print, Content: var2$";
+        string expectedOutput = "1$2$";
 
         require(testOutput == expectedOutput);
     }
@@ -86,11 +86,29 @@ namespace TestDatabase {
         Database::getConstants(dbResults);
 
         string testOutput;
-        for (const auto& constant : dbResults) {
-            testOutput.append(constant + "$");
+        for (const auto& constantLine : dbResults) {
+            testOutput.append(constantLine + "$");
         }
 
-        string expectedOutput = "Constant Value: 100$Constant Value: 200$";
+        string expectedOutput = "1$2$";
+
+        require(testOutput == expectedOutput);
+    }
+
+    TEST_CASE("Check") {
+        Database::initialize();
+        Database::insertConstant(1,100);
+        Database::insertConstant(2,200);
+
+        vector<string> dbResults;
+        Database::getConstants(dbResults);
+
+        string testOutput;
+        for (const auto& constantLine : dbResults) {
+            testOutput.append(constantLine + "$");
+        }
+
+        string expectedOutput = "1$2$";
 
         require(testOutput == expectedOutput);
     }

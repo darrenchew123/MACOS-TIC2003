@@ -36,13 +36,7 @@ namespace TestSourceProcessor {
         std::stringstream buffer;
         buffer << fileStream.rdbuf();
         std::string program = buffer.str();
-//        string program = "procedure echo {\n"
-//                         "    read num1;\n"
-//                         "    index = num1;\n"
-//                         "\n"
-//                         "    print num1;\n"
-//                         "    print index;\n"
-//                         "}";
+
         Tokenizer tk;
         vector<string> tokens;
         tk.tokenize(program, tokens);
@@ -68,7 +62,7 @@ namespace TestSourceProcessor {
         cout << "Statement fetched: " << procedures.size() << endl;
 
 
-        // Debugging: Print out the procedures and statements
+        // Debugging
         std::cout << "Debugging Information:" << std::endl; // Use std::cout and std::endl
         for (const auto& proc : procedures) {
             std::cout << "Procedure: " << proc << std::endl;
@@ -217,22 +211,21 @@ namespace TestSourceProcessor {
         vector<string> printLines;
         Database::getStatementType("print", printLines);
 
+
+        require(printLines[0] == "3");
+        require(printLines[1] == "4");
         for (const auto& printLine : printLines) {
             std::cout <<"print lines:  "<< printLine << endl;
         }
-        require(printLines[0] == "3");
-        require(printLines[1] == "4");
-
         vector<string> assignmentLines;
         Database::getStatementType("assign", assignmentLines);
         for (const auto& assignmentLine : assignmentLines) {
             std::cout <<"assignment lines:  "<< assignmentLine << endl;
         }
-        require(printLines[0] == "2");
+        require(assignmentLines[0] == "2");
 
         cout << "Assignment and print operations test passed." << endl;
     }
-
 
 
 }

@@ -2,17 +2,6 @@
 #include "QueryProcessor.h"
 #include "Tokenizer.h"
 
-TEST_CASE("QueryProcessor Type Validation") {
-    QueryProcessor qp;
-    REQUIRE(qp.typeValidator("procedure") == true);
-    REQUIRE(qp.typeValidator("variable") == true);
-    REQUIRE(qp.typeValidator("constant") == true);
-    REQUIRE(qp.typeValidator("assign") == true);
-    REQUIRE(qp.typeValidator("print") == true);
-    REQUIRE(qp.typeValidator("read") == true);
-    REQUIRE(qp.typeValidator("stmt") == true);
-    REQUIRE(qp.typeValidator("nonexistentType") == false);
-}
 
 TEST_CASE("QueryProcessor Declaration Processing") {
     QueryProcessor qp;

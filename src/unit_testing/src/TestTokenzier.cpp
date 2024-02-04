@@ -46,6 +46,7 @@ namespace TestTokenizer {
 
         string testOutput;
 
+
         for (unsigned int i = 0; i < tokens.size(); i++) {
             testOutput.append(tokens.at(i) + "$");
         }

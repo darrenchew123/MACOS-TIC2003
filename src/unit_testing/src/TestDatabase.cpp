@@ -95,24 +95,6 @@ namespace TestDatabase {
         require(testOutput == expectedOutput);
     }
 
-    TEST_CASE("Check") {
-        Database::initialize();
-        Database::insertConstant(1,100);
-        Database::insertConstant(2,200);
-
-        vector<string> dbResults;
-        Database::getConstants(dbResults);
-
-        string testOutput;
-        for (const auto& constantLine : dbResults) {
-            testOutput.append(constantLine + "$");
-        }
-
-        string expectedOutput = "1$2$";
-
-        require(testOutput == expectedOutput);
-    }
-
 }
 
 

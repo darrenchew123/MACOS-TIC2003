@@ -4,7 +4,7 @@
 
 TEST_CASE("Evaluate simple query to select procedures") {
     string program = "procedure calculate {\n"
-                     "    constValue = 10;\n"
+                     "    constValue = 10 + 500;\n"
                      "    const2 = 12;\n"
                      "}";
     SourceProcessor sp;

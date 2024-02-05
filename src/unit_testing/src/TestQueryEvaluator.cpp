@@ -5,7 +5,7 @@
 TEST_CASE("Evaluate simple query to select procedures") {
     string program = "procedure calculate {\n"
                      "    constValue = 10;\n"
-                     "    const2 = 123;\n"
+                     "    const2 = 12;\n"
                      "}";
     SourceProcessor sp;
     sp.process(program);

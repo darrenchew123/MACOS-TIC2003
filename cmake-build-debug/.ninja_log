@@ -22,3 +22,7 @@
 4	377	1707148241395706536	src/autotester/autotester	3a58b6eb554781f0
 4	777	1707148413355131614	src/unit_testing/CMakeFiles/unit_testing.dir/src/TestQueryEvaluator.cpp.o	4028811f3b894bcf
 777	835	1707148413414665433	src/unit_testing/unit_testing	a0fd0b94569dd251
+12	664	1707179186048476646	src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o	5d48beaefe692a1e
+665	715	1707179186105120000	src/spa/libspa.a	37cb527abf067923
+715	889	1707179186275668704	src/unit_testing/unit_testing	a0fd0b94569dd251
+3	79	1707179190882128705	src/autotester/autotester	3a58b6eb554781f0

@@ -1,56 +1,56 @@
 <?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
 <test_results>
 <info>
-<name>tests</name><parsing_time_taken>15.898000</parsing_time_taken>
+<name>tests</name><parsing_time_taken>10.575000</parsing_time_taken>
 </info>
 <queries>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="Procedure">1</id><querystr><![CDATA[procedure p; Select p]]></querystr>
 <stuans>trackTemperature</stuans>
 <correct>trackTemperature</correct>
-<time_taken>1.081000</time_taken>
+<time_taken>0.691000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="Variable">2</id><querystr><![CDATA[variable v; Select v]]></querystr>
 <stuans>currentTemp,defaultSetting,recordedTemp</stuans>
 <correct>currentTemp,recordedTemp,defaultSetting</correct>
-<time_taken>1.143000</time_taken>
+<time_taken>0.537000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="Constant">3</id><querystr><![CDATA[constant c; Select c]]></querystr>
 <stuans>3</stuans>
 <correct>3</correct>
-<time_taken>0.962000</time_taken>
+<time_taken>0.429000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="Assignment">4</id><querystr><![CDATA[assign a; Select a]]></querystr>
 <stuans>2,3</stuans>
 <correct>2,3</correct>
-<time_taken>0.830000</time_taken>
+<time_taken>0.485000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="Print">5</id><querystr><![CDATA[print pr; Select pr]]></querystr>
 <stuans>4,5,6</stuans>
 <correct>4,5,6</correct>
-<time_taken>0.988000</time_taken>
+<time_taken>0.426000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="Read">6</id><querystr><![CDATA[read rd; Select rd]]></querystr>
 <stuans>1</stuans>
 <correct>1</correct>
-<time_taken>1.002000</time_taken>
+<time_taken>0.449000</time_taken>
 <passed/>
 </query>
 <query>
 <id ReturnTuple="1" CondNum="1" RelNum="0" comment="Statement">7</id><querystr><![CDATA[stmt s; Select s]]></querystr>
 <stuans>1,2,3,4,5,6</stuans>
 <correct>1,2,3,4,5,6</correct>
-<time_taken>0.875000</time_taken>
+<time_taken>0.371000</time_taken>
 <passed/>
 </query>
 </queries>

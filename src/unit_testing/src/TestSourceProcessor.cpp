@@ -125,8 +125,8 @@ namespace TestSourceProcessor {
 
 
         // Check the value of the constant
-        require(constants[0] == "1");
-        require(constants[1] == "2");
+        require(constants[0] == "10");
+        require(constants[1] == "123");
 
         cout << "Constant insertion test passed." << endl;
     }

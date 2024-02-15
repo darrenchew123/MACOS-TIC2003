@@ -1,4 +1,4 @@
-# Install script for directory: /Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003
+# Install script for directory: /Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,17 +39,17 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug/src/spa/cmake_install.cmake")
+  include("/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/cmake-build-debug/src/spa/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug/src/autotester/cmake_install.cmake")
+  include("/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/cmake-build-debug/src/autotester/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug/src/unit_testing/cmake_install.cmake")
+  include("/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/cmake-build-debug/src/unit_testing/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -60,5 +60,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

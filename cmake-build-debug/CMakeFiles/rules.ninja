@@ -90,7 +90,7 @@ rule CXX_EXECUTABLE_LINKER__unit_testing_
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S"/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003" -B"/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug"
+  command = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S"/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U" -B"/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/cmake-build-debug"
   description = Re-running CMake...
   generator = 1
 

@@ -1,4 +1,4 @@
-# Install script for directory: /Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/src/autotester
+# Install script for directory: /Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/src/autotester
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

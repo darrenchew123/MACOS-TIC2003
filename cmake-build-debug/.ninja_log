@@ -33,3 +33,13 @@
 5	710	1709385159461013220	src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o	6eef5e77ec446d4e
 711	757	1709385159512917000	src/spa/libspa.a	37cb527abf067923
 757	801	1709385159552083599	src/autotester/autotester	c2138b2d22165ba6
+11	182	1709385232326571461	src/unit_testing/unit_testing	a0fd0b94569dd251
+10	731	1709386143147734489	src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o	6eef5e77ec446d4e
+731	778	1709386143201368000	src/spa/libspa.a	37cb527abf067923
+778	881	1709386143298587895	src/autotester/autotester	c2138b2d22165ba6
+4	738	1709386282504416290	src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o	6eef5e77ec446d4e
+738	781	1709386282552258000	src/spa/libspa.a	37cb527abf067923
+781	823	1709386282592365169	src/autotester/autotester	c2138b2d22165ba6
+6	664	1709386321179871091	src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o	6eef5e77ec446d4e
+664	709	1709386321230798000	src/spa/libspa.a	37cb527abf067923
+709	751	1709386321271320858	src/autotester/autotester	c2138b2d22165ba6

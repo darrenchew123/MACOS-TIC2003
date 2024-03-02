@@ -116,6 +116,7 @@ void SourceProcessor::process(string &program) {
             if (blockDepth > 0) {
                 blockDepth--;
                 i++;
+                if(!parentStack.empty()) parentStack.pop();
             } else {
                 inProcedure = false;
             }

@@ -35,3 +35,15 @@
 708	766	1709376470340435935	src/unit_testing/unit_testing	a0fd0b94569dd251
 3	639	1709376485305549382	src/unit_testing/CMakeFiles/unit_testing.dir/src/TestDatabase.cpp.o	75051c0bbb4b533
 639	695	1709376485360798781	src/unit_testing/unit_testing	a0fd0b94569dd251
+7	600	1709378414170335829	src/autotester/CMakeFiles/autotester.dir/src/TestWrapper.cpp.o	68d652f019cfec0c
+3	712	1709378438730105889	src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o	6eef5e77ec446d4e
+712	764	1709378438787034000	src/spa/libspa.a	37cb527abf067923
+764	891	1709378438910737747	src/autotester/autotester	c2138b2d22165ba6
+10	632	1709380575586545365	src/autotester/CMakeFiles/autotester.dir/src/TestWrapper.cpp.o	68d652f019cfec0c
+10	656	1709380575613195947	src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o	6eef5e77ec446d4e
+657	711	1709380575669727000	src/spa/libspa.a	37cb527abf067923
+712	817	1709380575774974427	src/autotester/autotester	c2138b2d22165ba6
+4	568	1709380907147401141	src/autotester/CMakeFiles/autotester.dir/src/TestWrapper.cpp.o	68d652f019cfec0c
+4	710	1709380948875310711	src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o	6eef5e77ec446d4e
+710	757	1709380948931477000	src/spa/libspa.a	37cb527abf067923
+757	857	1709380949027510139	src/autotester/autotester	c2138b2d22165ba6

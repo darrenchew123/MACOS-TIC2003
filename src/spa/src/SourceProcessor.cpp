@@ -18,7 +18,7 @@ void SourceProcessor::processProcedure(bool &inProcedure, string &procedureName,
 }
 
 // Process statement and insert into statement table
-void SourceProcessor::processStatement(const string& procedureName, const string& token, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes) {
+void SourceProcessor::processStatement(const string& procedureName, const string& token, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack) {
     if(statementTypes.size() == 0) return;
     string statementContent;
     int counter = i - 1;
@@ -28,6 +28,12 @@ void SourceProcessor::processStatement(const string& procedureName, const string
     }
     Database::insertStatement(procedureName, statementTypes.top(), statementContent, lineCount);
     statementTypes.pop();
+    // If there is a parent statement, insert relation
+    if (!parentStack.empty()) {
+        int parentLine = parentStack.top();
+        Database::insertParentChildRelation(parentLine, lineCount);
+    }
+
 }
 
 // Process variable and insert into variable table
@@ -47,18 +53,31 @@ void SourceProcessor::processReadPrintAssignment(const string& token, stack<stri
     else statementTypes.push(token);
 }
 
+void SourceProcessor::processControlFlow(const string& token, stack<string>& statementTypes, stack<int>& parentStack, int& lineCount) {
+    if (token == "if" || token == "while") {
+        statementTypes.push(token);
+        parentStack.push(lineCount);
+    } else if (token == "else") {
+        statementTypes.push(token);
+    } else if (token == "}") {
+        if (!parentStack.empty()) parentStack.pop();
+    }
+}
+
 
 //In procedure logic, logic that is not in procedure will not be excuted here
-void SourceProcessor::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes) {
-    if (token == "{" || token == ";" || token == "+" || token == "-" || token == "*" || token == "/" || (token == "\n" && tokens.at(i-1)=="\n")) {
-        return;
+void SourceProcessor::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack) {
+    if (token == "{" || token == ";" || token == "+" || token == "-" || token == "*" || token == "/" || (token == "\n" && tokens.at(i-1) == "\n")) {
+        // Skip these tokens
     } else if (token == "read" || token == "print" || token == "=") {
         processReadPrintAssignment(token, statementTypes);
     } else if (isInteger(token)) {
         processConstant(token, lineCount);
-    }else if (token == "\n") {
-        processStatement(procedureName, token, i, lineCount, tokens, statementTypes);
+    } else if (token == "\n") {
+        processStatement(procedureName, token, i, lineCount, tokens, statementTypes,parentStack);
         lineCount++;
+    } else if (token == "if" || token == "else" || token == "while") {
+        processControlFlow(token, statementTypes, parentStack, lineCount);
     } else {
         processVariable(token, lineCount);
     }
@@ -74,12 +93,14 @@ void SourceProcessor::process(string &program) {
     vector<string> tokens;
     tk.tokenize(program, tokens);
     stack<string> statementTypes;
+    stack<int> parentStack;
 
     for(auto token : tokens){
         cout <<"Token :"<<token <<endl;
     }
 
     int lineCount = 0;
+    int blockDepth = 0;
     bool inProcedure = false;
     string procedureName;
 
@@ -87,11 +108,19 @@ void SourceProcessor::process(string &program) {
         string token = tokens[i];
 
         if (token == "procedure") {
+            blockDepth = 0;
             processProcedure(inProcedure, procedureName, i, tokens);
-        } else if (token == "}") {
-            inProcedure = false;
+            inProcedure = true;
+        } else if (token == "{" && inProcedure) {
+            blockDepth++;
+        } else if (token == "}" && inProcedure) {
+            if (blockDepth > 0) {
+                blockDepth--;
+            } else {
+                inProcedure = false;
+            }
         } else if (inProcedure) {
-            processInProcedure(token, procedureName, i, lineCount, tokens, statementTypes);
+            processInProcedure(token, procedureName, i, lineCount, tokens, statementTypes, parentStack);
         }
     }
 }

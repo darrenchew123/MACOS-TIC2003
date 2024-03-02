@@ -29,7 +29,7 @@ void SourceProcessor::processStatement(const string& procedureName, const string
     Database::insertStatement(procedureName, statementTypes.top(), statementContent, lineCount);
     statementTypes.pop();
     // If there is a parent statement, insert relation
-    if (!parentStack.empty()) {
+    if (!parentStack.empty() && parentStack.top()!=lineCount) {
         int parentLine = parentStack.top();
         Database::insertParentChildRelation(parentLine, lineCount);
     }
@@ -63,7 +63,6 @@ void SourceProcessor::processControlFlow(const string& token, stack<string>& sta
         if (!parentStack.empty()) parentStack.pop();
     }
 }
-
 
 //In procedure logic, logic that is not in procedure will not be excuted here
 void SourceProcessor::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack) {
@@ -116,6 +115,7 @@ void SourceProcessor::process(string &program) {
         } else if (token == "}" && inProcedure) {
             if (blockDepth > 0) {
                 blockDepth--;
+                i++;
             } else {
                 inProcedure = false;
             }

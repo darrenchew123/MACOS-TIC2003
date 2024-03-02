@@ -72,6 +72,13 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 build cmake_object_order_depends_target_spa: phony || src/spa/CMakeFiles/spa.dir
 
+build src/spa/CMakeFiles/spa.dir/src/ControlFlowGraph.cpp.o: CXX_COMPILER__spa_unscanned_ /Users/chewd1/Desktop/MAC_M1_StartupSPASolution$ 2/A0265565U/Code_A0265565U/src/spa/src/ControlFlowGraph.cpp || cmake_object_order_depends_target_spa
+  DEP_FILE = src/spa/CMakeFiles/spa.dir/src/ControlFlowGraph.cpp.o.d
+  FLAGS = -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
+  INCLUDES = -I"/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/lib" -I"/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/src/spa/src"
+  OBJECT_DIR = src/spa/CMakeFiles/spa.dir
+  OBJECT_FILE_DIR = src/spa/CMakeFiles/spa.dir/src
+
 build src/spa/CMakeFiles/spa.dir/src/Database.cpp.o: CXX_COMPILER__spa_unscanned_ /Users/chewd1/Desktop/MAC_M1_StartupSPASolution$ 2/A0265565U/Code_A0265565U/src/spa/src/Database.cpp || cmake_object_order_depends_target_spa
   DEP_FILE = src/spa/CMakeFiles/spa.dir/src/Database.cpp.o.d
   FLAGS = -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -mmacosx-version-min=13.6 -fcolor-diagnostics
@@ -122,7 +129,7 @@ build src/spa/CMakeFiles/spa.dir/src/sqlite3.c.o: C_COMPILER__spa_unscanned_ /Us
 #############################################
 # Link the static library src/spa/libspa.a
 
-build src/spa/libspa.a: CXX_STATIC_LIBRARY_LINKER__spa_ src/spa/CMakeFiles/spa.dir/src/Database.cpp.o src/spa/CMakeFiles/spa.dir/src/QueryEvaluator.cpp.o src/spa/CMakeFiles/spa.dir/src/QueryParser.cpp.o src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o src/spa/CMakeFiles/spa.dir/src/Tokenizer.cpp.o src/spa/CMakeFiles/spa.dir/src/sqlite3.c.o
+build src/spa/libspa.a: CXX_STATIC_LIBRARY_LINKER__spa_ src/spa/CMakeFiles/spa.dir/src/ControlFlowGraph.cpp.o src/spa/CMakeFiles/spa.dir/src/Database.cpp.o src/spa/CMakeFiles/spa.dir/src/QueryEvaluator.cpp.o src/spa/CMakeFiles/spa.dir/src/QueryParser.cpp.o src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o src/spa/CMakeFiles/spa.dir/src/Tokenizer.cpp.o src/spa/CMakeFiles/spa.dir/src/sqlite3.c.o
   ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -mmacosx-version-min=13.6
   OBJECT_DIR = src/spa/CMakeFiles/spa.dir
   POST_BUILD = :

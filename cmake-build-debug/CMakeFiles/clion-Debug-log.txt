@@ -1,5 +1,17 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S "/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003" -B "/Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug"
--- /Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003 /Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug
+/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S "/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U" -B "/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/cmake-build-debug"
+-- The C compiler identification is AppleClang 15.0.0.15000040
+-- The CXX compiler identification is AppleClang 15.0.0.15000040
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Library/Developer/CommandLineTools/usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- /Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U /Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/cmake-build-debug
 
 
 *********************
@@ -19,6 +31,7 @@ Call Stack (most recent call first):
   CMakeLists.txt:39 (find_package)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
--- Configuring done (0.0s)
+-- Found AUTOTESTER: debug;/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/lib/autotester/apple/debug/libautotester.a;optimized;/Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/lib/autotester/apple/release/libautotester.a  
+-- Configuring done (6.3s)
 -- Generating done (0.0s)
--- Build files have been written to: /Users/chewd1/Downloads/MAC_M1_StartupSPASolution 2/A0123456Y/MACOS-TIC2003/cmake-build-debug
+-- Build files have been written to: /Users/chewd1/Desktop/MAC_M1_StartupSPASolution 2/A0265565U/Code_A0265565U/cmake-build-debug

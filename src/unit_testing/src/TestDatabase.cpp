@@ -90,7 +90,7 @@ namespace TestDatabase {
             testOutput.append(constantLine + "$");
         }
 
-        string expectedOutput = "1$2$";
+        string expectedOutput = "100$200$";
 
         require(testOutput == expectedOutput);
     }

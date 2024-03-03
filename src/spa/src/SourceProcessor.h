@@ -15,7 +15,7 @@ private:
 
     void processProcedure(bool &inProcedure, string &procedureName, int &i, const vector<string> &tokens);
 
-    void processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack);
+    void processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack);
 
     void processVariable(const string& varName, const int& lineCount);
 

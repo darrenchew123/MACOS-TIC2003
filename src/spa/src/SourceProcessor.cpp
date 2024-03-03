@@ -65,11 +65,13 @@ void SourceProcessor::processControlFlow(const string& token, stack<string>& sta
 }
 
 //In procedure logic, logic that is not in procedure will not be excuted here
-void SourceProcessor::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack) {
+void SourceProcessor::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack) {
     if (token == "{" || token == ";" || token == "+" || token == "-" || token == "*" || token == "/" || (token == "\n" && tokens.at(i-1) == "\n")) {
         // Skip these tokens
     } else if (token == "read" || token == "print" || token == "=") {
-        processReadPrintAssignment(token, statementTypes);
+        if (expressionStack.empty() || !expressionStack.top()) { // Only process as read/print/assign if not in an expression
+            processReadPrintAssignment(token, statementTypes);
+        }
     } else if (isInteger(token)) {
         processConstant(token, lineCount);
     } else if (token == "\n") {
@@ -77,6 +79,12 @@ void SourceProcessor::processInProcedure(const string& token, const string& proc
         lineCount++;
     } else if (token == "if" || token == "else" || token == "while") {
         processControlFlow(token, statementTypes, parentStack, lineCount);
+    } else if (token == "(") {
+        expressionStack.push(true);
+    } else if (token == ")") {
+        if (!expressionStack.empty()) {
+            expressionStack.pop(); // Pop the expression flag off the stack
+        }
     } else {
         processVariable(token, lineCount);
     }
@@ -92,6 +100,7 @@ void SourceProcessor::process(string &program) {
     vector<string> tokens;
     tk.tokenize(program, tokens);
     stack<string> statementTypes;
+    stack<bool> expressionStack;
     stack<int> parentStack;
 
     for(auto token : tokens){
@@ -121,7 +130,7 @@ void SourceProcessor::process(string &program) {
                 inProcedure = false;
             }
         } else if (inProcedure) {
-            processInProcedure(token, procedureName, i, lineCount, tokens, statementTypes, parentStack);
+            processInProcedure(token, procedureName, i, lineCount, tokens, statementTypes, parentStack,expressionStack);
         }
     }
 }

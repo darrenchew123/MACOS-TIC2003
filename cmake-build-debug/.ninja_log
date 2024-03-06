@@ -58,3 +58,6 @@
 5	634	1709471339033694458	src/spa/CMakeFiles/spa.dir/src/SourceProcessor.cpp.o	6eef5e77ec446d4e
 634	683	1709471339086967000	src/spa/libspa.a	37cb527abf067923
 683	727	1709471339129417814	src/autotester/autotester	c2138b2d22165ba6
+7	2420	1709735961895023751	src/spa/CMakeFiles/spa.dir/src/Database.cpp.o	22cb5eb9efcd1f68
+2420	2556	1709735962037520000	src/spa/libspa.a	37cb527abf067923
+2556	3626	1709735963104346163	src/autotester/autotester	c2138b2d22165ba6

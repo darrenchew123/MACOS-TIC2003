@@ -37,7 +37,7 @@ void Database::initialize() {
 
     // create Variable table
     const char* createVariableTableSQL = "CREATE TABLE Variable ("
-                                         "variableName VARCHAR(255) PRIMARY KEY,"
+                                         "variableName VARCHAR(255),"
                                          "statementCodeLine INT,"
                                          "FOREIGN KEY (statementCodeLine) REFERENCES Statement(codeLine));";
     sqlite3_exec(dbConnection, createVariableTableSQL, NULL, 0, &errorMessage);
@@ -54,16 +54,14 @@ void Database::initialize() {
                                                     "parentStatementCodeLine INT,"
                                                     "childStatementCodeLine INT,"
                                                     "PRIMARY KEY (parentStatementCodeLine, childStatementCodeLine),"
-                                                    "FOREIGN KEY (parentStatementCodeLine) REFERENCES Statement(codeLine),"
-                                                    "FOREIGN KEY (childStatementCodeLine) REFERENCES Statement(codeLine));";
+                                                    "FOREIGN KEY (parentStatementCodeLine) REFERENCES Statement(codeLine));";
     sqlite3_exec(dbConnection, createParentChildRelationTableSQL, NULL, 0, &errorMessage);
 
     // create NextRelation table
     const char* createNextRelationTableSQL = "CREATE TABLE NextRelation ("
                                              "currentStatementCodeLine INT,"
                                              "nextStatementCodeLine INT,"
-                                             "FOREIGN KEY (currentStatementCodeLine) REFERENCES Statement(codeLine),"
-                                             "FOREIGN KEY (nextStatementCodeLine) REFERENCES Statement(codeLine));";
+                                             "FOREIGN KEY (currentStatementCodeLine) REFERENCES Statement(codeLine));";
     sqlite3_exec(dbConnection, createNextRelationTableSQL, NULL, 0, &errorMessage);
 
     // create Uses table

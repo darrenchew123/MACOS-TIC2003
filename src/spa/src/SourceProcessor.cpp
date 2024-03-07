@@ -18,7 +18,7 @@ void SourceProcessor::processProcedure(bool &inProcedure, string &procedureName,
 }
 
 // Process statement and insert into statement table
-void SourceProcessor::processStatement(const string& procedureName, const string& token, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, vector<AssignmentInfo> &assignmentInfo) {
+void SourceProcessor::processStatement(const string& procedureName, const string& token, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, vector<StatementInfo> &statementInfo) {
     if(statementTypes.size() == 0) return;
     string statementContent;
     int counter = i - 2;
@@ -26,9 +26,7 @@ void SourceProcessor::processStatement(const string& procedureName, const string
         statementContent = tokens[counter] + " " + statementContent;
         counter--;
     }
-    if(statementTypes.top() == "assign"){
-        assignmentInfo.push_back({lineCount, statementContent});
-    }
+    statementInfo.push_back({lineCount, statementContent, statementTypes.top()});
     Database::insertStatement(procedureName, statementTypes.top(), statementContent, lineCount);
     statementTypes.pop();
     // If there is a parent statement, insert relation
@@ -69,7 +67,7 @@ void SourceProcessor::processControlFlow(const string& token, stack<string>& sta
 }
 
 //In procedure logic, logic that is not in procedure will not be excuted here
-void SourceProcessor::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<AssignmentInfo> &assignmentInfo) {
+void SourceProcessor::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo> &statementInfo) {
     if (token == "{" || token == ";" || token == "+" || token == "-" || token == "*" || token == "/" || (token == "\n" && tokens.at(i-1) == "\n")) {
         // Skip these tokens
     } else if (token == "read" || token == "print" || token == "=") {
@@ -79,7 +77,7 @@ void SourceProcessor::processInProcedure(const string& token, const string& proc
     } else if (isInteger(token)) {
         processConstant(token, lineCount);
     } else if (token == "\n") {
-        processStatement(procedureName, token, i, lineCount, tokens, statementTypes,parentStack, assignmentInfo);
+        processStatement(procedureName, token, i, lineCount, tokens, statementTypes,parentStack, statementInfo);
         lineCount++;
     } else if (token == "if" || token == "else" || token == "while") {
         processControlFlow(token, statementTypes, parentStack, lineCount);
@@ -94,8 +92,9 @@ void SourceProcessor::processInProcedure(const string& token, const string& proc
     }
 }
 
-void SourceProcessor::processExpression(std::vector<AssignmentInfo> &assignmentInfo) {
-    for (const auto& info : assignmentInfo) {
+void SourceProcessor::processExpression(std::vector<StatementInfo> &statementInfo) {
+    for (const auto& info : statementInfo) {
+        if(info.statementType != "assign") continue;
         size_t equalsPosition = info.statementContent.find('=');
         if (equalsPosition != std::string::npos) {
             string lhs = info.statementContent.substr(0, equalsPosition);
@@ -106,6 +105,29 @@ void SourceProcessor::processExpression(std::vector<AssignmentInfo> &assignmentI
             Database::insertPattern(info.lineCount, lhs, rhs);
         } else {
             std::cerr << "Assignment operator not found in statement: " << info.statementContent << std::endl;
+        }
+    }
+}
+
+std::string SourceProcessor::extractVariableName(const std::string& statement, const std::string& statementType) {
+    std::istringstream iss(statement);
+    std::string word;
+    if (statementType == "read") {
+        iss >> word >> word;
+        return word;
+    } else if (statementType == "assign") {
+        std::getline(iss, word, '=');
+        word.erase(std::remove_if(word.begin(), word.end(), ::isspace), word.end());
+        return word;
+    }
+    return "";
+}
+
+void SourceProcessor::processModifies(std::vector<StatementInfo>& statementInfo) {
+    for (const auto& info : statementInfo) {
+        std::string variableName = extractVariableName(info.statementContent, info.statementType);
+        if (!variableName.empty()) {
+            Database::insertModifies(info.lineCount, variableName);
         }
     }
 }
@@ -124,7 +146,7 @@ void SourceProcessor::process(string &program) {
     stack<int> parentStack;
     string lhs, rhs;
     bool isAssignment = false;
-    vector<AssignmentInfo> assignmentInfo;
+    vector<StatementInfo> statementInfo;
 
     for(auto token : tokens){
         cout <<"Token :"<<token <<endl;
@@ -153,9 +175,10 @@ void SourceProcessor::process(string &program) {
                 inProcedure = false;
             }
         } else if (inProcedure) {
-            processInProcedure(token, procedureName, i, lineCount, tokens, statementTypes, parentStack,expressionStack, assignmentInfo);
+            processInProcedure(token, procedureName, i, lineCount, tokens, statementTypes, parentStack,expressionStack, statementInfo);
         }
     }
 
-    processExpression(assignmentInfo);
+    processExpression(statementInfo);
+    processModifies(statementInfo);
 }

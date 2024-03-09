@@ -5,6 +5,7 @@
 #include<iostream>
 #include<stack>
 #include <algorithm>
+#include <regex>
 #include "Database.h"
 #include "Tokenizer.h"
 #include "utils/InfixToPostfix.h"
@@ -23,7 +24,7 @@ private:
 
     void processProcedure(bool &inProcedure, string &procedureName, int &i, const vector<string> &tokens);
 
-    void processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo> &statementInfo);
+    void processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo> &statementInfo, stack<int>& ifStack);
 
     void processVariable(const string& varName, const int& lineCount);
 
@@ -33,13 +34,15 @@ private:
 
     void processReadPrintAssignment(const string& token, stack<string>& statementTypes);
 
-    void processControlFlow(const string& token, stack<string>& statementTypes, stack<int>& parentStack, int& lineCount);
+    void processControlFlow(const string& token, stack<string>& statementTypes, stack<int>& parentStack, int& lineCount, stack<int>& ifStack);
 
     void processExpression(std::vector<StatementInfo> &statementInfo);
 
     string extractVariableName(const std::string& statement, const std::string& statementType);
 
     void processModifies(std::vector<StatementInfo>& statementInfo);
+
+    bool checkName(string token);
 
 public:
     void process(string& process);

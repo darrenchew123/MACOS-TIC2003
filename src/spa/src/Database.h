@@ -40,14 +40,6 @@ public:
 
     static void getParentChildRelations(vector<string>& results);
 
-    static void insertNextRelation(int currentStatementCodeLine, int nextStatementCodeLine);
-
-    static void getNextRelations(vector<string>& results);
-
-    static void insertUses(int statementCodeLine, const string& variableName);
-
-    static void getUses(vector<string>& results);
-
     static void insertModifies(int statementCodeLine, const string& variableName);
 
     static void getModifies(vector<string>& results);

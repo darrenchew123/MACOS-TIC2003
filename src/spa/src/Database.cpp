@@ -10,11 +10,9 @@ void Database::initialize() {
     sqlite3_open("database.db", &dbConnection);
 
     // drop existing tables (if any)
-    const char* dropTablesSQL = "DROP TABLE IF EXISTS Uses;"
-                                "DROP TABLE IF EXISTS Modifies;"
+    const char* dropTablesSQL = "DROP TABLE IF EXISTS Modifies;"
                                 "DROP TABLE IF EXISTS Pattern;"
                                 "DROP TABLE IF EXISTS ParentChildRelation;"
-                                "DROP TABLE IF EXISTS NextRelation;"
                                 "DROP TABLE IF EXISTS Variable;"
                                 "DROP TABLE IF EXISTS Statement;"
                                 "DROP TABLE IF EXISTS Constant;"
@@ -57,20 +55,7 @@ void Database::initialize() {
                                                     "FOREIGN KEY (parentStatementCodeLine) REFERENCES Statement(codeLine));";
     sqlite3_exec(dbConnection, createParentChildRelationTableSQL, NULL, 0, &errorMessage);
 
-    // create NextRelation table
-    const char* createNextRelationTableSQL = "CREATE TABLE NextRelation ("
-                                             "currentStatementCodeLine INT,"
-                                             "nextStatementCodeLine INT,"
-                                             "FOREIGN KEY (currentStatementCodeLine) REFERENCES Statement(codeLine));";
-    sqlite3_exec(dbConnection, createNextRelationTableSQL, NULL, 0, &errorMessage);
 
-    // create Uses table
-    const char* createUsesTableSQL = "CREATE TABLE Uses ("
-                                     "statementCodeLine INT,"
-                                     "variableName VARCHAR(255),"
-                                     "FOREIGN KEY (statementCodeLine) REFERENCES Statement(codeLine),"
-                                     "FOREIGN KEY (variableName) REFERENCES Variable(variableName));";
-    sqlite3_exec(dbConnection, createUsesTableSQL, NULL, 0, &errorMessage);
 
     // create Modifies table
     const char* createModifiesTableSQL = "CREATE TABLE Modifies ("
@@ -102,11 +87,9 @@ void Database::postProcessDbResults(vector<string>& results, int columnIndex) {
 
 void Database::clear() {
     // Delete all records from each table
-    const char* clearTablesSQL = "DELETE FROM Uses;"
-                                 "DELETE FROM Modifies;"
+    const char* clearTablesSQL = "DELETE FROM Modifies;"
                                  "DELETE FROM Pattern;"
                                  "DELETE FROM ParentChildRelation;"
-                                 "DELETE FROM NextRelation;"
                                  "DELETE FROM Variable;"
                                  "DELETE FROM Statement;"
                                  "DELETE FROM Constant;"
@@ -221,33 +204,8 @@ void Database::getParentChildRelations(vector<string>& results) {
     postProcessDbResults(results,0);
 }
 
-void Database::insertNextRelation(int currentStatementCodeLine, int nextStatementCodeLine) {
-    string insertSQL = "INSERT INTO NextRelation (currentStatementCodeLine, nextStatementCodeLine) VALUES ("
-                       + to_string(currentStatementCodeLine) + ", "
-                       + to_string(nextStatementCodeLine) + ");";
-    sqlite3_exec(dbConnection, insertSQL.c_str(), NULL, 0, &errorMessage);
-}
 
-void Database::getNextRelations(vector<string>& results) {
-    dbResults.clear();
-    string getSQL = "SELECT currentStatementCodeLine, nextStatementCodeLine FROM NextRelation;";
-    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
-    postProcessDbResults(results,0);
-}
 
-void Database::insertUses(int statementCodeLine, const string& variableName) {
-    string insertSQL = "INSERT INTO Uses (statementCodeLine, variableName) VALUES ("
-                       + to_string(statementCodeLine) + ", '"
-                       + variableName + "');";
-    sqlite3_exec(dbConnection, insertSQL.c_str(), NULL, 0, &errorMessage);
-}
-
-void Database::getUses(vector<string>& results) {
-    dbResults.clear();
-    string getSQL = "SELECT statementCodeLine, variableName FROM Uses;";
-    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
-    postProcessDbResults(results,0);
-}
 
 void Database::insertModifies(int statementCodeLine, const string& variableName) {
     string insertSQL = "INSERT INTO Modifies (statementCodeLine, variableName) VALUES ("

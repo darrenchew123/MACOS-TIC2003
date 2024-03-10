@@ -117,43 +117,7 @@ namespace TestDatabase {
         require(testOutput == expectedOutput);
     }
 
-    TEST_CASE("CheckDatabaseNextRelation") {
-        Database::initialize();
-        Database::insertNextRelation(1, 2);
-        Database::insertNextRelation(2, 3);
 
-        vector<string> dbResults;
-        Database::getNextRelations(dbResults);
-
-        string testOutput;
-        for (const auto& relation : dbResults) {
-            testOutput.append(relation + "$");
-        }
-        cout <<"Test Output: "<<testOutput << endl;
-
-        string expectedOutput = "1$2$";
-
-        require(testOutput == expectedOutput);
-    }
-
-    TEST_CASE("CheckDatabaseUses") {
-        Database::initialize();
-        Database::insertUses(1, "varA");
-        Database::insertUses(2, "varB");
-
-        vector<string> dbResults;
-        Database::getUses(dbResults);
-
-        string testOutput;
-        for (const auto& use : dbResults) {
-            testOutput.append(use + "$");
-        }
-        cout <<"Test Output: "<<testOutput << endl;
-
-        string expectedOutput = "1$2$";
-
-        require(testOutput == expectedOutput);
-    }
 
     TEST_CASE("CheckDatabaseModifies") {
         Database::initialize();

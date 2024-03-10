@@ -6,6 +6,7 @@
 #include <fstream>
 #include <sstream>
 #include <unistd.h>
+#include <set>
 
 using namespace std;
 
@@ -227,5 +228,29 @@ namespace TestSourceProcessor {
         cout << "Assignment and print operations test passed." << endl;
     }
 
+    TEST_CASE("TestControlFlowProcessing") {
+        string program = "procedure ControlFlow {\n"
+                         "    if (x == 1) then {\n"
+                         "        print x;\n"
+                         "    } else {\n"
+                         "        print y;\n"
+                         "    }\n"
+                         "    z = 0;\n"
+                         "    while (z < 5) {\n"
+                         "        z = z + 1;\n"
+                         "        print z;\n"
+                         "    }\n"
+                         "}";
 
+        SourceProcessor sp;
+        sp.process(program);
+
+        vector<string> ifLines, whileLines;
+        Database::getStatementType("if", ifLines);
+        Database::getStatementType("while", whileLines);
+
+        REQUIRE(ifLines.size() == 1);
+        REQUIRE(whileLines.size() == 1);
+
+    }
 }

@@ -1,7 +1,7 @@
 #include "catch.hpp"
-#include "QueryEvaluator.h"
-#include "QueryParser.h"
-#include "Tokenizer.h"
+#include "pql/QueryEvaluator.h"
+#include "pql/QueryParser.h"
+#include "utils/Tokenizer.h"
 
 
 TEST_CASE("QueryProcessor Declaration Processing") {

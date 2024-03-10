@@ -1,5 +1,5 @@
 #include "QueryProcessor.h"
-#include "Database.h"
+#include "db/Database.h"
 #include "utils/InfixToPostfix.h"
 #include <iostream>
 #include <string>

@@ -1,5 +1,5 @@
 
-#include "Tokenizer.h"
+#include "utils/Tokenizer.h"
 
 #include "catch.hpp"
 using namespace std;

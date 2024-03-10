@@ -1,6 +1,6 @@
 #include "catch.hpp"
-#include "QueryEvaluator.h"
-#include "SourceProcessor.h"
+#include "pql/QueryEvaluator.h"
+#include "simple/SourceProcessor.h"
 
 TEST_CASE("Evaluate simple query to select procedures") {
     string program = "procedure calculate {\n"

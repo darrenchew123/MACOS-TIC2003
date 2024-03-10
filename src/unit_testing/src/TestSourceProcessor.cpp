@@ -1,5 +1,5 @@
-#include "SourceProcessor.h"
-#include "Database.h"
+#include "simple/SourceProcessor.h"
+#include "db/Database.h"
 
 #include "catch.hpp"
 #include <iostream>

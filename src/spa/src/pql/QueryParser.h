@@ -2,8 +2,8 @@
 
 #include <string>
 #include <vector>
-#include "Database.h"
-#include "Tokenizer.h"
+#include "db/Database.h"
+#include "utils/Tokenizer.h"
 using namespace std;
 
 

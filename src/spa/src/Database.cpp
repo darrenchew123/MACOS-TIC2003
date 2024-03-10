@@ -213,12 +213,12 @@ void Database::insertModifies(int statementCodeLine, const string& variableName)
     sqlite3_exec(dbConnection, insertSQL.c_str(), NULL, 0, &errorMessage);
 }
 
-//void Database::getModifies(vector<string>& results) {
-//    dbResults.clear();
-//    string getSQL = "SELECT statementCodeLine, variableName FROM Modifies;";
-//    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
-//    postProcessDbResults(results,0);
-//}
+void Database::getModifies(vector<string>& results) {
+    dbResults.clear();
+    string getSQL = "SELECT statementCodeLine, variableName FROM Modifies;";
+    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
+    postProcessDbResults(results,0);
+}
 
 void Database::insertPattern(int statementCodeLine, const string& LHSExpression, const string& RHSExpression) {
     string insertSQL = "INSERT INTO Pattern (statementCodeLine, LHSExpression, RHSExpression) VALUES ("
@@ -228,12 +228,12 @@ void Database::insertPattern(int statementCodeLine, const string& LHSExpression,
     sqlite3_exec(dbConnection, insertSQL.c_str(), NULL, 0, &errorMessage);
 }
 
-//void Database::getPatterns(vector<string>& results) {
-//    dbResults.clear();
-//    string getSQL = "SELECT statementCodeLine, LHSExpression, RHSExpression FROM Pattern;";
-//    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
-//    postProcessDbResults(results,2);
-//}
+void Database::getPatterns(vector<string>& results) {
+    dbResults.clear();
+    string getSQL = "SELECT statementCodeLine, LHSExpression, RHSExpression FROM Pattern;";
+    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
+    postProcessDbResults(results,2);
+}
 
 
 

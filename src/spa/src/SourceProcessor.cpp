@@ -1,7 +1,6 @@
 #include "SourceProcessor.h"
 
-
-
+//Skip token
 bool SourceProcessor::skipTokenCheck(const string& token, int& i, const vector<string>& tokens) {
     return token == "{" || token == ";" || token == "+" || token == "-" || token == "*" ||
            token == "/" || token == "then" ||
@@ -72,6 +71,7 @@ void SourceProcessor::processReadPrintAssignment(const string& token, stack<stri
     std::cout << "Pushed to statementTypes: " << token << std::endl;
 }
 
+// Process control flow for if/else/while
 void SourceProcessor::processControlFlow(const string& token, stack<string>& statementTypes, stack<int>& parentStack, int& lineCount, stack<int>& ifStack, bool& pendingParentPush) {
     if (token == "if" || token == "while") {
         statementTypes.push(token);
@@ -96,7 +96,7 @@ void SourceProcessor::processControlFlow(const string& token, stack<string>& sta
     }
 }
 
-
+// Process "()"
 void SourceProcessor::handleExpressionStack(const string& token, stack<bool>& expressionStack) {
     if (token == "(") {
         expressionStack.push(true);
@@ -105,6 +105,7 @@ void SourceProcessor::handleExpressionStack(const string& token, stack<bool>& ex
     }
 }
 
+// Process token to respective calls
 void SourceProcessor::delegateTokenProcessing(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo>& statementInfo, stack<int>& ifStack, bool& pendingParentPush) {
     std::cout << "Delegating token: " << token << ", lineCount: " << lineCount << std::endl;
     if (token == "read" || token == "print" || token == "=") {
@@ -123,7 +124,7 @@ void SourceProcessor::delegateTokenProcessing(const string& token, const string&
     }
 }
 
-
+// Process expression to LHS RHS
 void SourceProcessor::processExpression(std::vector<StatementInfo> &statementInfo) {
     for (const auto& info : statementInfo) {
         if(info.statementType != "assign") continue;
@@ -144,6 +145,7 @@ void SourceProcessor::processExpression(std::vector<StatementInfo> &statementInf
     }
 }
 
+// Extract variable
 std::string SourceProcessor::extractVariableName(const std::string& statement, const std::string& statementType) {
     std::istringstream iss(statement);
     std::string word;
@@ -167,6 +169,7 @@ void SourceProcessor::processModifies(std::vector<StatementInfo>& statementInfo)
     }
 }
 
+// Process SIMPLE code inside the procedure
 void SourceProcessor::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo>& statementInfo, stack<int>& ifStack, bool& pendingParentPush) {
     if (skipTokenCheck(token, i, tokens)) {
         return;

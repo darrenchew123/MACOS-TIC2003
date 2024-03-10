@@ -42,11 +42,11 @@ public:
 
     static void insertModifies(int statementCodeLine, const string& variableName);
 
-    //static void getModifies(vector<string>& results);
+    static void getModifies(vector<string>& results);
 
     static void insertPattern(int statementCodeLine, const string& LHSExpression, const string& RHSExpression);
 
-    //static void getPatterns(vector<string>& results);
+    static void getPatterns(vector<string>& results);
 
     //iteration2
     //static void FollowsT(string codeLine, vector<string>& results);

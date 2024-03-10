@@ -42,11 +42,23 @@ public:
 
     static void insertModifies(int statementCodeLine, const string& variableName);
 
-    static void getModifies(vector<string>& results);
-
     static void insertPattern(int statementCodeLine, const string& LHSExpression, const string& RHSExpression);
 
-    static void getPatterns(vector<string>& results);
+    static void getModifies_OutputVar(string codeLine, vector<string>& results);
+
+    static void getModifies_OutputStmt(string rightArg, vector<string>& results);
+
+    static void getModifies_OutputProcedures(string rightArg, vector<string>& results);
+
+    static void getParentT_OutputStmt(string leftArg, vector<string>& results);
+
+    static void getParent_OutputStmt(string RightArg, vector<string>& results);
+
+    static void getPattern_OutputStmt(string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& results);
+
+    static void getCombo_ParentT_Pattern_OutputStmt(string res, vector<string>& results);
+
+    static void getCombo_Modifies_Pattern_OutputProcedure(string res, vector<string>& results);
 
 private:
     static sqlite3* dbConnection;

@@ -1,4 +1,5 @@
 #include "Database.h"
+#include <unordered_map>
 
 sqlite3* Database::dbConnection;
 vector<vector<string>> Database::dbResults;
@@ -78,10 +79,8 @@ void Database::initialize() {
 }
 
 void Database::postProcessDbResults(vector<string>& results, int columnIndex) {
-    for (const vector<string>& dbRow : dbResults) {
-        if (dbRow.size() > columnIndex) {
-            results.push_back(dbRow.at(columnIndex));
-        }
+    for (const vector<string>& dbRow : dbResults) {  
+            results.push_back(dbRow.at(columnIndex));    
     }
 }
 
@@ -214,12 +213,12 @@ void Database::insertModifies(int statementCodeLine, const string& variableName)
     sqlite3_exec(dbConnection, insertSQL.c_str(), NULL, 0, &errorMessage);
 }
 
-void Database::getModifies(vector<string>& results) {
-    dbResults.clear();
-    string getSQL = "SELECT statementCodeLine, variableName FROM Modifies;";
-    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
-    postProcessDbResults(results,0);
-}
+//void Database::getModifies(vector<string>& results) {
+//    dbResults.clear();
+//    string getSQL = "SELECT statementCodeLine, variableName FROM Modifies;";
+//    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
+//    postProcessDbResults(results,0);
+//}
 
 void Database::insertPattern(int statementCodeLine, const string& LHSExpression, const string& RHSExpression) {
     string insertSQL = "INSERT INTO Pattern (statementCodeLine, LHSExpression, RHSExpression) VALUES ("
@@ -229,12 +228,12 @@ void Database::insertPattern(int statementCodeLine, const string& LHSExpression,
     sqlite3_exec(dbConnection, insertSQL.c_str(), NULL, 0, &errorMessage);
 }
 
-void Database::getPatterns(vector<string>& results) {
-    dbResults.clear();
-    string getSQL = "SELECT statementCodeLine, LHSExpression, RHSExpression FROM Pattern;";
-    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
-    postProcessDbResults(results,2);
-}
+//void Database::getPatterns(vector<string>& results) {
+//    dbResults.clear();
+//    string getSQL = "SELECT statementCodeLine, LHSExpression, RHSExpression FROM Pattern;";
+//    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
+//    postProcessDbResults(results,2);
+//}
 
 
 
@@ -258,3 +257,135 @@ int Database::callback(void* NotUsed, int argc, char** argv, char** azColName) {
 
     return 0;
 }
+
+
+
+void Database::getModifies_OutputVar(string codeLine, vector<string>& results) {
+
+    dbResults.clear();
+
+    string getModifies_OutputVarSQL = "SELECT variableName FROM Modifies WHERE statementCodeLine ='"
+        + codeLine + "';";
+
+    sqlite3_exec(dbConnection, getModifies_OutputVarSQL.c_str(), callback, 0, &errorMessage);
+
+    postProcessDbResults(results, 0);
+}
+
+void Database::getModifies_OutputStmt(string rightArg, vector<string>& results) {
+
+    dbResults.clear();
+
+    string getModifies_OutputStmtSQL = "SELECT statementCodeLine FROM Modifies WHERE variableName = '"
+        + rightArg + "';";
+
+    sqlite3_exec(dbConnection, getModifies_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+
+    postProcessDbResults(results, 0);
+}
+
+void Database::getModifies_OutputProcedures(string rightArg, vector<string>& results) {
+
+    dbResults.clear();
+
+    string getModifies_OutputProceduresSQL = "SELECT DISTINCT s.procedureName FROM Statement s JOIN Modifies m ON m.statementCodeLine = s.codeLine WHERE m.variableName = '"
+        + rightArg +"';";
+
+    sqlite3_exec(dbConnection, getModifies_OutputProceduresSQL.c_str(), callback, 0, &errorMessage);
+
+    postProcessDbResults(results, 0);
+}
+
+
+void Database::getParentT_OutputStmt(string leftArg, vector<string>& results) {
+
+    dbResults.clear();
+
+    string getParentT_OutputStmtSQL;
+
+    if (leftArg == "w") {
+        getParentT_OutputStmtSQL = "SELECT p.childStatementCodeLine FROM ParentChildRelation p JOIN Statement s ON p.parentStatementCodeLine = s.codeLine WHERE s.statementType = 'while';";
+        sqlite3_exec(dbConnection, getParentT_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+    }
+    else if (leftArg == "i") {
+        getParentT_OutputStmtSQL = "SELECT p.childStatementCodeLine FROM ParentChildRelation p JOIN Statement s ON p.parentStatementCodeLine = s.codeLine WHERE s.statementType = 'if';";
+        sqlite3_exec(dbConnection, getParentT_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+    }
+    postProcessDbResults(results, 0);
+}
+
+void Database::getParent_OutputStmt(string RightArg, vector<string>& results) {
+
+    dbResults.clear();
+
+    string getParent_OutputStmtSQL = "SELECT parentStatementCodeLine FROM ParentChildRelation WHERE childStatementCodeLine ='"
+        + RightArg + "';";
+
+    sqlite3_exec(dbConnection, getParent_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+
+    postProcessDbResults(results, 0);
+}
+
+
+void Database::getPattern_OutputStmt(string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& results) {
+    dbResults.clear();
+
+    string getPattern_OutputStmtSQL;
+
+    if (patternLeftArg == "_" && patternRightArg == "_") {
+        getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern;";
+        sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+    }
+    // to fix leftArg space
+    else if (isSubexpression && patternLeftArg != "_") {
+        getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern WHERE RHSExpression like '%"
+            + patternRightArg + "%' AND LHSExpression = '"
+            + patternLeftArg + " ';";
+        sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+    }
+    else if (isSubexpression && patternLeftArg == "_") {
+        getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern WHERE RHSExpression like '%"
+            + patternRightArg + "%';";
+        sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+    }
+    else if (patternLeftArg == "_") {
+        getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern WHERE RHSExpression = '"
+            + patternRightArg + "';";
+        sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+    }
+    //to fix leftArg space
+    else if (patternRightArg == "_") {
+        getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern WHERE LHSExpression = '"
+            + patternLeftArg + " ';";
+        sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+    }
+    //to fix leftArg space
+    else if (patternLeftArg != "" && patternRightArg != "") {
+        getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern WHERE LHSExpression = '"
+            + patternLeftArg + " ' AND RHSExpression = '"
+            + patternRightArg + "';";
+        sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+    }
+        postProcessDbResults(results, 0);
+}
+
+void Database::getCombo_ParentT_Pattern_OutputStmt(string res, vector<string>& results) {
+    dbResults.clear();
+
+    string getCombo_ParentT_Pattern_OutputStmtSQL = "SELECT DISTINCT parentStatementCodeLine FROM ParentChildRelation WHERE childStatementCodeLine in ("
+        + res + ");";
+    sqlite3_exec(dbConnection, getCombo_ParentT_Pattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+
+    postProcessDbResults(results, 0);
+}
+
+void Database::getCombo_Modifies_Pattern_OutputProcedure(string res, vector<string>& results) {
+    dbResults.clear();
+
+    string getCombo_Modifies_Pattern_OutputProcedureSQL = "SELECT DISTINCT procedureName FROM Statement WHERE codeLine in ("
+        + res + ");";
+    sqlite3_exec(dbConnection, getCombo_Modifies_Pattern_OutputProcedureSQL.c_str(), callback, 0, &errorMessage);
+
+    postProcessDbResults(results, 0);
+}
+

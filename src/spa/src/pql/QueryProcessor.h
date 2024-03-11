@@ -54,7 +54,7 @@ public:
 
     void initSelectType(string token, Query& query);
 
-    vector<string> findCommonStrings(const vector<string>& arr1, const vector<string>& arr2);
+    vector<string> findCommonStrings(vector<string>& arr1, vector<string>& arr2);
 
     string concatenateWithCommas(const vector<string>& commonStrings);
 };

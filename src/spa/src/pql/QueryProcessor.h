@@ -1,36 +1,18 @@
 #pragma once
 
+#include <iostream>
+#include <unordered_set>
 #include <string>
 #include <vector>
-#include "db/Database.h"
 #include "utils/Tokenizer.h"
+#include "db/Database.h"
+#include "utils/InfixToPostfix.h"
+#include "pql/Query.h"
+#include "pql/QueryParser.h"
+
 
 
 using namespace std;
-
-struct Query {
-
-    string selectType;
-    string declaredVar;
-
-    struct Condition {
-
-        string type;
-        string leftArg;
-        string rightArg;
-        bool isT = false;
-    } condition;
-
-    struct Pattern {
-
-        string patternType;
-        string var;
-        string patternLeftArg;
-        string patternRightArg;
-        bool isSubexpression = false;
-
-    } pattern;
-};
 
 class QueryProcessor {
 public:
@@ -38,23 +20,14 @@ public:
 
     ~QueryProcessor();
 
-    //bool typeValidator(const string &token);
 
-    //void processObjects(const vector<string>& tokens, unordered_map<string, string> &declaredObjects);
+    static vector<string> findCommonStrings(vector<string>& arr1, vector<string>& arr2);
 
-    //void processSelect(const vector<string>& tokens, unordered_map<string, string> declaredObjects, vector<pair<string, string>>& selectObjects);
+    static string concatenateWithCommas(const vector<string>& commonStrings);
 
-    Query parser(const vector<string>& tokens);
+    static void getParentT_Pattern_OutputParentT(string& leftArg, string& patternLeftArg, string& patternRightArg, bool isSubexpression, string& selectType, vector<string> &databaseResults);
 
-    void evaluate(string query, vector<string>& results);
+    static void getParentT_Pattern_OutputAssign(string& leftArg, const string& patternLeftArg, string& patternRightArg, bool isSubexpression, vector<string>& databaseResults);
 
-    bool isT(const string& token);
-
-    string checkQuotationMarks_returnArg(int& currIdx, const vector<string>& tokens, Query& query);
-
-    void initSelectType(string token, Query& query);
-
-    vector<string> findCommonStrings(vector<string>& arr1, vector<string>& arr2);
-
-    string concatenateWithCommas(const vector<string>& commonStrings);
+    static void getModifies_Pattern_OutputProcedure(string& rightArg, string& patternLeftArg, string& patternRightArg, bool isSubexpression, vector<string>& databaseResults);
 };

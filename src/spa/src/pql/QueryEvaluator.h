@@ -5,7 +5,7 @@
 #include "db/Database.h"
 #include "utils/Tokenizer.h"
 #include "QueryParser.h"
-
+#include "QueryProcessor.h"
 
 
 using namespace std;
@@ -13,9 +13,11 @@ using namespace std;
 class QueryEvaluator {
 
 public:
-	QueryEvaluator();
+
+    QueryEvaluator();
 
     ~QueryEvaluator();
 
-	void evaluate(string query, vector<string>& results);
+    static void evaluate(string query, vector<string>& output);
+
 };

@@ -2,22 +2,25 @@
 
 #include <string>
 #include <vector>
+#include <pql/Query.h>
 #include "db/Database.h"
 #include "utils/Tokenizer.h"
+#include "utils/InfixToPostfix.h"
+#include <unordered_set>
 using namespace std;
 
 
 class QueryParser {
-private:
-    static bool typeValidator(const string &token);
-
 public:
 
-    static void processObjects(const vector<string>& tokens, unordered_map<string, string> &declaredObjects);
+    static bool isT(const string& token);
 
-    static void processSelect(const vector<string>& tokens, unordered_map<string, string> declaredObjects, vector<pair<string, string>>& selectObjects);
+    static void initSelectType(string token, Query& query);
 
-    static void parser(const vector<string>& tokens, vector<pair<string, string>>& selectObjects);
+    static string checkQuotationMarks_returnArg(int& currIdx, const vector<string>& tokens, Query& query);
+
+    static Query parser(const vector<string>& tokens);
+
 };
 
 

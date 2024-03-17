@@ -40,6 +40,14 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
         else if (selectType == "p" && conditionType == "Modifies" && patternType == "pattern") {
             QueryProcessor::getModifies_Pattern_OutputProcedure(rightArg,patternLeftArg,patternRightArg,isSubexpression,databaseResults);
         }
+            // Select a such that Modifies (a, v) pattern a (v, _"n"_)
+        else if (selectType == "a" && conditionType == "Modifies" && patternType == "pattern" && rightArg == patternLeftArg) {
+            QueryProcessor::getModifies_Pattern_OutputAssign(patternRightArg, isSubexpression, databaseResults);
+        }
+            // Select v such that Modifies (a, v) pattern a1 (v, _"n"_)
+        else if (selectType == "v" && conditionType == "Modifies" && patternType == "pattern" && rightArg == patternLeftArg) {
+            QueryProcessor::getModifies_Pattern_OutputVar(patternRightArg, isSubexpression, databaseResults);
+        }
     }
 
     else {
@@ -95,6 +103,11 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
         }
         else if (selectType == "r") {
             Database::getStatementType(selectType, databaseResults);
+        }
+        else if (selectType == "w" || selectType == "i") {
+            if (conditionType == "Modifies") {
+                QueryProcessor::getModifies_OutputParents(rightArg, selectType, databaseResults);
+            }
         }
     }
     for (string res : databaseResults)

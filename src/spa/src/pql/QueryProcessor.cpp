@@ -81,3 +81,45 @@ void QueryProcessor::getModifies_Pattern_OutputProcedure(string& rightArg, strin
     }
 }
 
+void QueryProcessor::getModifies_Pattern_OutputAssign(string& patternRightArg, bool isSubexpression, vector<string>& databaseResults) {
+    vector<string> arr1;
+    Database::getPattern_OutputStmt("_", patternRightArg, isSubexpression, arr1);
+
+    if (!arr1.empty()) {
+        string res = QueryProcessor::concatenateWithCommas(arr1);
+        Database::getCombo_Modifies_Pattern_OutputAssign(res, databaseResults);
+    }
+}
+
+void QueryProcessor::getModifies_Pattern_OutputVar(string& patternRightArg, bool isSubexpression, vector<string>& databaseResults) {
+    vector<string> arr1;
+    Database::getPattern_OutputStmt("_", patternRightArg, isSubexpression, arr1);
+
+    if (!arr1.empty()) {
+        string res = QueryProcessor::concatenateWithCommas(arr1);
+        Database::getCombo_Modifies_Pattern_OutputVar(res, databaseResults);
+    }
+}
+
+void QueryProcessor::getModifies_OutputParents(string& rightArg, string& selectType, vector<string>& databaseResults) {
+    //Retrieve modification statements
+    vector<string> LHSLines;
+    Database::getModifies_OutputStmt(rightArg, LHSLines);
+
+    //Concatenate lines if not empty
+    string childrenLines;
+    if (!LHSLines.empty()) {
+        childrenLines = QueryProcessor::concatenateWithCommas(LHSLines);
+    }
+
+    //Retrieve parent lines based on children lines
+    vector<string> ParentLinesArr;
+    Database::getCombo_ParentT_Pattern_OutputStmt(childrenLines, ParentLinesArr);
+
+    //Process parent lines and update databaseResults
+    if (!ParentLinesArr.empty()) {
+        string ParentLines = QueryProcessor::concatenateWithCommas(ParentLinesArr);
+        Database::getModifies_OutputParents(selectType, ParentLines, databaseResults);
+    }
+}
+

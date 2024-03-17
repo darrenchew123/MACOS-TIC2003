@@ -31,7 +31,7 @@ string QueryParser::checkQuotationMarks_returnArg(int& currIdx, const vector<str
         currIdx++;
         res = InfixToPostfix::infixToPostfix(res); // convert to postfix
     }
-        // tokens withing quotations marks
+        // tokens within quotations marks
     else if (tokens[currIdx] == "\"") {
 
         currIdx++;

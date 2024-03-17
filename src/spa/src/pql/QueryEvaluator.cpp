@@ -18,6 +18,7 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
     Query queryToExecute = QueryParser::parser(tokens);
 
     string selectType = queryToExecute.selectType;
+    string declaredVar = queryToExecute.declaredVar;
     string conditionType = queryToExecute.condition.type;
     bool isT = queryToExecute.condition.isT;
     string leftArg = queryToExecute.condition.leftArg;
@@ -32,7 +33,7 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
     if (!conditionType.empty() && !patternType.empty()) {
         processComboQuery(selectType, conditionType, isT, leftArg, rightArg, patternType, patternLeftArg, patternRightArg, isSubexpression, databaseResults);
     } else {
-        processSimpleQuery(selectType, conditionType, isT, leftArg, rightArg, patternType, patternLeftArg, patternRightArg, isSubexpression, databaseResults);
+        processSimpleQuery(selectType, conditionType, isT, leftArg, rightArg, patternType, patternLeftArg, patternRightArg, isSubexpression, databaseResults, declaredVar);
     }
 
     output.insert(output.end(), databaseResults.begin(), databaseResults.end());
@@ -60,10 +61,13 @@ void QueryEvaluator::processComboQuery(string selectType, string conditionType, 
 }
 
 // Process simple queries
-void QueryEvaluator::processSimpleQuery(string selectType, string conditionType, bool isT, string leftArg, string rightArg, string patternType, string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& databaseResults) {
+void QueryEvaluator::processSimpleQuery(string selectType, string conditionType, bool isT, string leftArg, string rightArg, string patternType, string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& databaseResults, string declaredVar) {
     if (selectType == "p") {
         if (conditionType == "Modifies") {
             Database::getModifies_OutputProcedures(rightArg, databaseResults);
+        }
+        else if (declaredVar == "pr") {
+            Database::getStatementType(selectType, databaseResults);
         }
         else
             Database::getProcedures(databaseResults);
@@ -103,9 +107,6 @@ void QueryEvaluator::processSimpleQuery(string selectType, string conditionType,
         }
         else
             Database::getStatementType(selectType, databaseResults);
-    }
-    else if (selectType == "p") {
-        Database::getStatementType(selectType, databaseResults);
     }
     else if (selectType == "r") {
         Database::getStatementType(selectType, databaseResults);

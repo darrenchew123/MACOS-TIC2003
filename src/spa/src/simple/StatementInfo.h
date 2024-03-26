@@ -6,6 +6,7 @@ struct StatementInfo {
     int lineCount;
     std::string statementContent;
     std::string statementType;
+    std::string procedureName;
 };
 
 #endif // STATEMENT_INFO_H

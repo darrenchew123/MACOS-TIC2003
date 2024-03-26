@@ -22,7 +22,8 @@ add_library(spa ${db} ${pql} ${simple} ${utils}
         src/simple/UsesProcessing.cpp
         src/simple/UsesProcessing.h
         src/simple/StatementInfo.h
-        src/pql/Query.h)
+        src/pql/Query.h
+        src/simple/CallsProcessing.h)
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

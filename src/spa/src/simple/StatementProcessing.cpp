@@ -14,7 +14,7 @@ void StatementProcessing::processStatement(const string& procedureName, const st
         statementContent = tokens[counter] + " " + statementContent;
         counter--;
     }
-    statementInfo.push_back({lineCount, statementContent, statementTypes.top()});
+    statementInfo.push_back({lineCount, statementContent, statementTypes.top(), procedureName});
     Database::insertStatement(procedureName, statementTypes.top(), statementContent, lineCount);
     statementTypes.pop();
     if (!parentStack.empty() && parentStack.top()!=lineCount) {
@@ -31,7 +31,7 @@ void StatementProcessing::processStatement(const string& procedureName, const st
 }
 
 //Process read print assignment logic and add into statement type
-void StatementProcessing::processReadPrintAssignment(const string& token, stack<string>& statementTypes) {
+void StatementProcessing::processStatementStack(const string& token, stack<string>& statementTypes) {
     if(token == "=") statementTypes.push("assign");
     else statementTypes.push(token);
     cout << "Pushed to statementTypes: " << token << endl;

@@ -54,6 +54,8 @@ public:
 
     static void getUses(vector<string>& results);
 
+    static void insertCalls(const string& caller, const string& callee);
+
     static void getModifies_OutputVar(string codeLine, vector<string>& results);
 
     static void getModifies_OutputStmt(string rightArg, vector<string>& results);

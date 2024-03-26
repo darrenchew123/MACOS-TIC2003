@@ -11,9 +11,9 @@ bool TokenProcessing::skipTokenCheck(const string& token, int& i, const vector<s
 // Process token to respective calls
 void TokenProcessing::delegateTokenProcessing(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo>& statementInfo, stack<int>& ifStack, bool& pendingParentPush) {
     cout << "Delegating token: " << token << ", lineCount: " << lineCount << endl;
-    if (token == "read" || token == "print" || token == "=") {
+    if (token == "read" || token == "print" || token == "=" || token == "call" ) {
         if (expressionStack.empty() || !expressionStack.top()) {
-            StatementProcessing::processReadPrintAssignment(token, statementTypes);
+            StatementProcessing::processStatementStack(token, statementTypes);
         }
     } else if (SyntaxValidator::isInteger(token)) {
         ProcessConstant::processConstant(token, lineCount);

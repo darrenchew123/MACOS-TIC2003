@@ -9,6 +9,7 @@
 #include "ProcedureProcessing.h"
 #include "ModifiesProcessing.h"
 #include "UsesProcessing.h"
+#include "CallsProcessing.h"
 #include  "StatementInfo.h"
 
 

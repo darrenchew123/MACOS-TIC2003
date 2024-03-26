@@ -4,7 +4,7 @@
 void ProcedureProcessing::processProcedure(bool &inProcedure, string &procedureName, int &i, const vector<string> &tokens) {
     cout << "Entering processProcedure with token: " << tokens[i] << endl;
     inProcedure = true;
-    procedureName = tokens[++i]; // Move to the next token to get the procedure name
+    procedureName = tokens[++i];
 
     if (!SyntaxValidator::checkName(procedureName)) {
         cerr << "Procedure name does not adhere to naming convention: " << procedureName << endl;

@@ -20,7 +20,8 @@ void Database::initialize() {
         "DROP TABLE IF EXISTS Variable;"
         "DROP TABLE IF EXISTS Statement;"
         "DROP TABLE IF EXISTS Constant;"
-        "DROP TABLE IF EXISTS Procedure;";
+       "DROP TABLE IF EXISTS Procedure;"
+       "DROP TABLE IF EXISTS Call;";
     sqlite3_exec(dbConnection, dropTablesSQL, NULL, 0, &errorMessage);
 
     // create Procedure table
@@ -84,6 +85,15 @@ void Database::initialize() {
                                      "FOREIGN KEY (statementCodeLine) REFERENCES Statement(codeLine),"
                                      "FOREIGN KEY (variableName) REFERENCES Variable(variableName));";
     sqlite3_exec(dbConnection, createUsesTableSQL, NULL, 0, &errorMessage);
+
+    // Create Call table
+    const char* createCallTableSQL =
+            "CREATE TABLE Call ("
+            "procedureCaller VARCHAR(255),"
+            "procedureCallee VARCHAR(255),"
+            "FOREIGN KEY (procedureCaller) REFERENCES Procedure(procedureName),"
+            "FOREIGN KEY (procedureCallee) REFERENCES Procedure(procedureName));";
+    sqlite3_exec(dbConnection, createCallTableSQL, NULL, 0, &errorMessage);
 
     // initialize the result vector
     dbResults = vector<vector<string>>();
@@ -282,6 +292,13 @@ void Database::getUses(vector<string>& results) {
     string getSQL = "SELECT statementCodeLine, variableName FROM Uses;";
     sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
     postProcessDbResults(results,0);
+}
+
+void Database::insertCalls(const string& caller, const string& callee) {
+    string insertCallSQL = "INSERT INTO Call (procedureCaller, procedureCallee) VALUES ('"
+                           + caller + "', '"
+                           + callee + "');";
+    sqlite3_exec(dbConnection, insertCallSQL.c_str(), NULL, 0, &errorMessage);
 }
 
 // callback method to put one row of results from the database into the dbResults vector

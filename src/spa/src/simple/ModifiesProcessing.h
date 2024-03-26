@@ -12,5 +12,5 @@ public:
 
     static string extractModifiesVariable(const string& statement, const string& statementType);
 
-    };
+};
 

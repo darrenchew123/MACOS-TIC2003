@@ -8,6 +8,7 @@
 #include "utils/Tokenizer.h"
 #include "ProcedureProcessing.h"
 #include "ModifiesProcessing.h"
+#include "UsesProcessing.h"
 #include  "StatementInfo.h"
 
 

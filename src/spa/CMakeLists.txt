@@ -19,6 +19,8 @@ add_library(spa ${db} ${pql} ${simple} ${utils}
         src/simple/ProcessConstant.h
         src/simple/ModifiesProcessing.cpp
         src/simple/ModifiesProcessing.h
+        src/simple/UsesProcessing.cpp
+        src/simple/UsesProcessing.h
         src/simple/StatementInfo.h
         src/pql/Query.h)
 # this makes the headers accessible for other projects which uses spa lib

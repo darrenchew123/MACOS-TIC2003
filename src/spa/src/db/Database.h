@@ -50,6 +50,10 @@ public:
 
     static void getPatterns(vector<string>& results);
 
+    static void insertUses(int statementCodeLine, const string& variableName);
+
+    static void getUses(vector<string>& results);
+
     static void getModifies_OutputVar(string codeLine, vector<string>& results);
 
     static void getModifies_OutputStmt(string rightArg, vector<string>& results);
@@ -67,6 +71,8 @@ public:
     static void getParent_OutputStmt(string RightArg, vector<string>& results);
 
     static void getPattern_OutputStmt(string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& results);
+
+    static void getUses_OutputVar(string leftArg, vector<string>& results);
 
     static void getCombo_ParentT_Pattern_OutputStmt(string res, vector<string>& results);
 

@@ -13,7 +13,8 @@ void Database::initialize() {
     sqlite3_open("database.db", &dbConnection);
 
     // drop existing tables (if any)
-    const char* dropTablesSQL = "DROP TABLE IF EXISTS Modifies;"
+    const char* dropTablesSQL ="DROP TABLE IF EXISTS Modifies;"
+        "DROP TABLE IF EXISTS Uses;"
         "DROP TABLE IF EXISTS Pattern;"
         "DROP TABLE IF EXISTS ParentChildRelation;"
         "DROP TABLE IF EXISTS Variable;"
@@ -76,6 +77,14 @@ void Database::initialize() {
         "FOREIGN KEY (statementCodeLine) REFERENCES Statement(codeLine));";
     sqlite3_exec(dbConnection, createPatternTableSQL, NULL, 0, &errorMessage);
 
+    // create Uses table
+    const char* createUsesTableSQL = "CREATE TABLE Uses ("
+                                     "statementCodeLine INT,"
+                                     "variableName VARCHAR(255),"
+                                     "FOREIGN KEY (statementCodeLine) REFERENCES Statement(codeLine),"
+                                     "FOREIGN KEY (variableName) REFERENCES Variable(variableName));";
+    sqlite3_exec(dbConnection, createUsesTableSQL, NULL, 0, &errorMessage);
+
     // initialize the result vector
     dbResults = vector<vector<string>>();
 }
@@ -103,6 +112,7 @@ vector<string> Database::findCommonStrings(vector<string>& arr1, vector<string>&
 void Database::clear() {
     // Delete all records from each table
     const char* clearTablesSQL = "DELETE FROM Modifies;"
+        "DELETE FROM Uses;"
         "DELETE FROM Pattern;"
         "DELETE FROM ParentChildRelation;"
         "DELETE FROM Variable;"
@@ -260,9 +270,19 @@ void Database::getPatterns(vector<string>& results) {
     postProcessDbResults(results,2);
 }
 
+void Database::insertUses(int statementCodeLine, const string& variableName) {
+    string insertSQL = "INSERT INTO Uses (statementCodeLine, variableName) VALUES ("
+                       + to_string(statementCodeLine) + ", '"
+                       + variableName + "');";
+    sqlite3_exec(dbConnection, insertSQL.c_str(), NULL, 0, &errorMessage);
+}
 
-
-
+void Database::getUses(vector<string>& results) {
+    dbResults.clear();
+    string getSQL = "SELECT statementCodeLine, variableName FROM Uses;";
+    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
+    postProcessDbResults(results,0);
+}
 
 // callback method to put one row of results from the database into the dbResults vector
 // This method is called each time a row of results is returned from the database
@@ -323,20 +343,20 @@ void Database::getModifies_OutputProcedures(string rightArg, vector<string>& res
     postProcessDbResults(results, 0);
 }
 
-//void Database::getUses_OutputVar(string leftArg, vector<string>& results) {
-//
-//    dbResults.clear();
-//
-//    string getUses_OutputVar = "SELECT variableName FROM Uses WHERE statementCodeLine ='"
-//        + leftArg + "';";
-//
-//    sqlite3_exec(dbConnection, getUses_OutputVar.c_str(), callback, 0, &errorMessage);
-//
-//    for (vector<string> dbRow : dbResults) {
-//        string var = dbRow.at(0);
-//        results.push_back(var);
-//    }
-//}
+void Database::getUses_OutputVar(string leftArg, vector<string>& results) {
+
+    dbResults.clear();
+
+    string getUses_OutputVar = "SELECT variableName FROM Uses WHERE statementCodeLine ='"
+        + leftArg + "';";
+
+    sqlite3_exec(dbConnection, getUses_OutputVar.c_str(), callback, 0, &errorMessage);
+
+    for (vector<string> dbRow : dbResults) {
+        string var = dbRow.at(0);
+        results.push_back(var);
+    }
+}
 
 void Database::getParentT_OutputStmt(string leftArg, vector<string>& results) {
 

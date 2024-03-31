@@ -50,6 +50,13 @@ public:
 
     static void getPatterns(vector<string>& results);
 
+    static void insertUses(int statementCodeLine, const string& variableName);
+
+    static void getUses(vector<string>& results);
+
+    static void insertCalls(const string& caller, const string& callee);
+
+
     static void getModifies_OutputVar(string codeLine, vector<string>& results);
 
     static void getModifies_OutputStmt(string rightArg, vector<string>& results);
@@ -77,6 +84,8 @@ public:
     static void getCombo_Modifies_Pattern_OutputAssign(string res, vector<string>& results);
 
     static void getCombo_Modifies_Pattern_OutputVar(string res, vector<string>& results);
+
+    static void getUses_OutputVar(string leftArg, vector<string>& results);
 
 private:
     static sqlite3* dbConnection;

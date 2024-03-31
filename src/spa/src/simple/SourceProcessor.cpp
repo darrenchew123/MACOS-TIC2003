@@ -51,6 +51,6 @@ void SourceProcessor::process(string &program) {
 
     ExpressionProcessing::processExpression(statementInfo);
     ModifiesProcessing::processModifies(statementInfo);
-    UsesProcessing::processUses(statementInfo);
-    CallsProcessing::processCalls(statementInfo);
+//    UsesProcessing::processUses(statementInfo);
+//    CallsProcessing::processCalls(statementInfo);
 }

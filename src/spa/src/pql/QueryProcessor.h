@@ -4,11 +4,11 @@
 #include <unordered_set>
 #include <string>
 #include <vector>
-#include "utils/Tokenizer.h"
-#include "db/Database.h"
-#include "utils/InfixToPostfix.h"
-#include "pql/Query.h"
-#include "pql/QueryParser.h"
+#include "../utils/Tokenizer.h"
+#include "../db/Database.h"
+#include "../utils/InfixToPostfix.h"
+#include "Query.h"
+#include "QueryParser.h"
 
 
 

@@ -11,6 +11,7 @@
 #include "UsesProcessing.h"
 #include "CallsProcessing.h"
 #include  "StatementInfo.h"
+#include "AncestorProcessing.h"
 
 
 using namespace std;

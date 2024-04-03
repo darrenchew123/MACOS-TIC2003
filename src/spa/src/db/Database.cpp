@@ -17,6 +17,7 @@ void Database::initialize() {
         "DROP TABLE IF EXISTS Uses;"
         "DROP TABLE IF EXISTS Pattern;"
         "DROP TABLE IF EXISTS ParentChildRelation;"
+        "DROP TABLE IF EXISTS AncestorRelation;"
         "DROP TABLE IF EXISTS Variable;"
         "DROP TABLE IF EXISTS Statement;"
         "DROP TABLE IF EXISTS Constant;"
@@ -60,7 +61,13 @@ void Database::initialize() {
         "FOREIGN KEY (parentStatementCodeLine) REFERENCES Statement(codeLine));";
     sqlite3_exec(dbConnection, createParentChildRelationTableSQL, NULL, 0, &errorMessage);
 
-
+    // create AncestorRelation table
+    const char* createAncestorRelationSQL = "CREATE TABLE AncestorRelation ("
+                                                    "ancestorStatementCodeLine INT,"
+                                                    "childStatementCodeLine INT,"
+                                                    "PRIMARY KEY (ancestorStatementCodeLine, childStatementCodeLine),"
+                                                    "FOREIGN KEY (ancestorStatementCodeLine) REFERENCES Statement(codeLine));";
+    sqlite3_exec(dbConnection, createAncestorRelationSQL, NULL, 0, &errorMessage);
 
     // create Modifies table
     const char* createModifiesTableSQL = "CREATE TABLE Modifies ("
@@ -241,7 +248,19 @@ void Database::getParentChildRelations(vector<string>& results) {
     postProcessDbResults(results, 0);
 }
 
+void Database::insertAncestorRelation(int ancestorStatementCodeLine, int childStatementCodeLine) {
+    string insertSQL = "INSERT INTO AncestorRelation (ancestorStatementCodeLine, childStatementCodeLine) VALUES ("
+                       + to_string(ancestorStatementCodeLine) + ", "
+                       + to_string(childStatementCodeLine) + ");";
+    sqlite3_exec(dbConnection, insertSQL.c_str(), NULL, 0, &errorMessage);
+}
 
+void Database::getAncestorRelation(vector<string>& results) {
+    dbResults.clear();
+    string getSQL = "SELECT ancestorStatementCodeLine, childStatementCodeLine FROM AncestorRelation;";
+    sqlite3_exec(dbConnection, getSQL.c_str(), callback, 0, &errorMessage);
+    postProcessDbResults(results, 0);
+}
 
 
 void Database::insertModifies(int statementCodeLine, const string& variableName) {

@@ -42,6 +42,10 @@ public:
 
     static void getParentChildRelations(vector<string>& results);
 
+    static void insertAncestorRelation(int ancestorStatementCodeLine, int childStatementCodeLine);
+
+    static void getAncestorRelation(vector<string>& results);
+
     static void insertModifies(int statementCodeLine, const string& variableName);
 
     static void getModifies(vector<string>& results);

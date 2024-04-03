@@ -15,6 +15,6 @@ class ProcedureProcessing {
 public:
     static void processProcedure(bool &inProcedure, string &procedureName, int &i, const vector<string> &tokens);
 
-    static void processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo>& statementInfo, stack<int>& ifStack, bool& pendingParentPush);
+    static void processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo>& statementInfo, stack<int>& ifStack, bool& pendingParentPush, unordered_map<int,int> &parentChildMapping);
 
 };

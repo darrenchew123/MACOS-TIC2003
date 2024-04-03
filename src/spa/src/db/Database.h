@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 #include "sqlite3.h"
-#include "utils/SyntaxValidator.h"
+#include "pql/Query.h"
 
 
 using namespace std;
@@ -80,7 +80,7 @@ public:
 
     static void getParent_OutputStmt(string selectVar, string leftArg, string rightArg, vector<string>& results);
 
-    static void getPattern_OutputStmt(string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& results);
+    static void getPattern_OutputStmt(string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& results, Query queryToExecute);
 
     static void getCombo_ParentT_Pattern_OutputStmt(string res, vector<string>& results);
 

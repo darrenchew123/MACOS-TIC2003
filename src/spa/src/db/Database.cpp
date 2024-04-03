@@ -550,7 +550,7 @@ void Database::getParent_OutputStmt(string selectVar, string leftArg, string rig
 }
 
 
-void Database::getPattern_OutputStmt(string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& results) {
+void Database::getPattern_OutputStmt(string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& results, Query queryToExecute) {
     dbResults.clear();
 
     string getPattern_OutputStmtSQL;
@@ -561,7 +561,7 @@ void Database::getPattern_OutputStmt(string patternLeftArg, string patternRightA
         getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern;";
         sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
     }
-    else if (patternRightArg == "_" && SyntaxValidator::isVariable(patternLeftArg)) {
+    else if (patternRightArg == "_" && queryToExecute.declaredVariables[patternLeftArg]=="variable") {
         getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern WHERE LHSExpression IN (SELECT variableName FROM Variable)";
         sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
     }

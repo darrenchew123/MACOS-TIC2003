@@ -555,8 +555,14 @@ void Database::getPattern_OutputStmt(string patternLeftArg, string patternRightA
 
     string getPattern_OutputStmtSQL;
 
+    cout << "patternLeftArg " << patternLeftArg << " patternRightArg " << patternRightArg;
+
     if (patternLeftArg == "_" && patternRightArg == "_") {
         getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern;";
+        sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
+    }
+    else if (patternRightArg == "_" && SyntaxValidator::isVariable(patternLeftArg)) {
+        getPattern_OutputStmtSQL = "SELECT statementCodeLine FROM Pattern WHERE LHSExpression IN (SELECT variableName FROM Variable)";
         sqlite3_exec(dbConnection, getPattern_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
     }
     else if (isSubexpression && patternLeftArg != "_") {

@@ -107,9 +107,6 @@ void QueryEvaluator::processComboQuery(string selectVar, string selectType, stri
 }
 
 
-
-
-
 // process simple queries
 void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, string conditionType, bool isT, string leftArg, string rightArg, string patternType, string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& databaseResults) {
     if (selectType == "procedure") {
@@ -171,6 +168,7 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
             }
         }
         else if (patternType == "pattern") {
+            cout << "testing assign " <<endl;
             Database::getPattern_OutputStmt(patternLeftArg, patternRightArg, isSubexpression, databaseResults);
         }
         else

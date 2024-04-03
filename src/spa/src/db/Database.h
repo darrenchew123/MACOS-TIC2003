@@ -2,7 +2,10 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 #include "sqlite3.h"
+#include "utils/SyntaxValidator.h"
+
 
 using namespace std;
 

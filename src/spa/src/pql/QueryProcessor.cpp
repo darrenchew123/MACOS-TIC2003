@@ -69,7 +69,7 @@ void QueryProcessor::getParentT_Pattern_OutputAssign(string& leftArg, const stri
 
 void QueryProcessor::getModifies_Pattern_OutputProcedure(string& rightArg, string& patternLeftArg, string& patternRightArg, bool isSubexpression, vector<string>& databaseResults, Query queryToExecute) {
     vector<string> arr1;
-    Database::getModifies_OutputStmt(rightArg, arr1);
+    Database::getModifies_OutputStmt(rightArg, arr1,queryToExecute);
     vector<string> arr2;
     Database::getPattern_OutputStmt(patternLeftArg, patternRightArg, isSubexpression, arr2,queryToExecute);
 
@@ -101,10 +101,10 @@ void QueryProcessor::getModifies_Pattern_OutputVar(string& patternRightArg, bool
     }
 }
 
-void QueryProcessor::getModifies_OutputParents(string& rightArg, string& selectType, vector<string>& databaseResults) {
+void QueryProcessor::getModifies_OutputParents(string& rightArg, string& selectType, vector<string>& databaseResults, Query queryToExecute) {
     //Retrieve modification statements
     vector<string> LHSLines;
-    Database::getModifies_OutputStmt(rightArg, LHSLines);
+    Database::getModifies_OutputStmt(rightArg, LHSLines,queryToExecute);
 
     //Concatenate lines if not empty
     string childrenLines;

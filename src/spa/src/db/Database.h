@@ -64,13 +64,13 @@ public:
     static void insertCalls(const string& caller, const string& callee);
 
 
-    static void getModifies_OutputVar(string codeLine, vector<string>& results);
+    static void getModifies_OutputVar(string codeLine, vector<string>& results, Query queryToExecute);
 
-    static void getModifies_OutputStmt(string rightArg, vector<string>& results);
+    static void getModifies_OutputStmt(string rightArg, vector<string>& results, Query queryToExecute);
 
     static void getModifies_OutputParents(string selectType, string ParentLines, vector<string>& results);
 
-    static void getModifies_OutputProcedures(string rightArg, vector<string>& results);
+    static void getModifies_OutputProcedures(string rightArg, vector<string>& results, Query queryToExecute);
 
     static void getParentT_OutputStmt(string leftArg, vector<string>& results);
 

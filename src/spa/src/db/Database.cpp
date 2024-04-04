@@ -353,36 +353,63 @@ int Database::callback(void* NotUsed, int argc, char** argv, char** azColName) {
 
 
 
-void Database::getModifies_OutputVar(string codeLine, vector<string>& results) {
+void Database::getModifies_OutputVar(string leftArg, vector<string>& results, Query queryToExecute) {
 
     dbResults.clear();
+    string getModifies_OutputVarSQL;
+    if(queryToExecute.declaredVariables[leftArg]=="stmt" || queryToExecute.declaredVariables[leftArg]=="procedure"){
+        getModifies_OutputVarSQL ="SELECT distinct variableName FROM Modifies;";
+    }
+    else if(queryToExecute.declaredVariables[leftArg]=="read"){
+        getModifies_OutputVarSQL ="SELECT m.variableName \n"
+                                  "FROM Modifies AS m \n"
+                                  "WHERE m.statementCodeLine IN (\n"
+                                  "    SELECT s.codeLine \n"
+                                  "    FROM Statement AS s \n"
+                                  "    WHERE s.statementType = \"read\"\n"
+                                  ");";
+    }
+    else{
+        getModifies_OutputVarSQL = "SELECT variableName FROM Modifies WHERE statementCodeLine ='"
+                                   + leftArg + "';";
+    }
 
-    string getModifies_OutputVarSQL = "SELECT variableName FROM Modifies WHERE statementCodeLine ='"
-        + codeLine + "';";
 
     sqlite3_exec(dbConnection, getModifies_OutputVarSQL.c_str(), callback, 0, &errorMessage);
 
     postProcessDbResults(results, 0);
 }
 
-void Database::getModifies_OutputStmt(string rightArg, vector<string>& results) {
+void Database::getModifies_OutputStmt(string rightArg, vector<string>& results, Query queryToExecute) {
 
     dbResults.clear();
-
-    string getModifies_OutputStmtSQL = "SELECT statementCodeLine FROM Modifies WHERE variableName = '"
-        + rightArg + "';";
+    string getModifies_OutputStmtSQL;
+    if(queryToExecute.declaredVariables[rightArg]=="variable" || rightArg == "_"){
+        getModifies_OutputStmtSQL = "SELECT statementCodeLine FROM Modifies;";
+    }
+    else {
+        getModifies_OutputStmtSQL = "SELECT statementCodeLine FROM Modifies WHERE variableName = '"
+                                           + rightArg + "';";
+    }
 
     sqlite3_exec(dbConnection, getModifies_OutputStmtSQL.c_str(), callback, 0, &errorMessage);
 
     postProcessDbResults(results, 0);
 }
 
-void Database::getModifies_OutputProcedures(string rightArg, vector<string>& results) {
+void Database::getModifies_OutputProcedures(string rightArg, vector<string>& results, Query queryToExecute) {
 
     dbResults.clear();
+    string getModifies_OutputProceduresSQL;
+    if(queryToExecute.declaredVariables[rightArg]=="variable"){
+        getModifies_OutputProceduresSQL = "SELECT procedureName FROM procedure";
+    }
+    else{
+        getModifies_OutputProceduresSQL = "SELECT DISTINCT s.procedureName FROM Statement s JOIN Modifies m ON m.statementCodeLine = s.codeLine WHERE m.variableName = '"
+                                                 + rightArg + "';";
+    }
 
-    string getModifies_OutputProceduresSQL = "SELECT DISTINCT s.procedureName FROM Statement s JOIN Modifies m ON m.statementCodeLine = s.codeLine WHERE m.variableName = '"
-        + rightArg + "';";
+
 
     sqlite3_exec(dbConnection, getModifies_OutputProceduresSQL.c_str(), callback, 0, &errorMessage);
 

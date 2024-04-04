@@ -111,7 +111,7 @@ void QueryEvaluator::processComboQuery(string selectVar, string selectType, stri
 void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, string conditionType, bool isT, string leftArg, string rightArg, string patternType, string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& databaseResults, Query queryToExecute) {
     if (selectType == "procedure") {
         if (conditionType == "Modifies") {
-            Database::getModifies_OutputProcedures(rightArg, databaseResults);
+            Database::getModifies_OutputProcedures(rightArg, databaseResults, queryToExecute);
         }
         else
             Database::getProcedures(databaseResults);
@@ -126,7 +126,7 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
     }
     else if (selectType == "variable") {
         if (conditionType == "Modifies") {
-            Database::getModifies_OutputVar(leftArg, databaseResults);
+            Database::getModifies_OutputVar(leftArg, databaseResults, queryToExecute);
         }
         else
             Database::getVariables(databaseResults);
@@ -149,7 +149,7 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
             }
         }
         else if (conditionType == "Modifies") {
-            Database::getModifies_OutputStmt(rightArg, databaseResults);
+            Database::getModifies_OutputStmt(rightArg, databaseResults,queryToExecute);
         }
         else {
             Database::getStatements(databaseResults);
@@ -179,7 +179,7 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
     }
     else if (selectType == "while" || selectType == "if") {
         if (conditionType == "Modifies") {
-            QueryProcessor::getModifies_OutputParents(rightArg, selectType, databaseResults);
+            QueryProcessor::getModifies_OutputParents(rightArg, selectType, databaseResults,queryToExecute);
         }
         Database::getStatementType(selectType, databaseResults);
     }

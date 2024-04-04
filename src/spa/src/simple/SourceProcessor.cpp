@@ -15,7 +15,7 @@ void SourceProcessor::process(string &program) {
     stack<int> parentStack, ifStack;
     string lhs, rhs;
     vector<StatementInfo> statementInfo;
-    unordered_map<int,int> parentChildMapping;
+    multimap<int,int> parentChildMapping;
     bool pendingParentPush = false;
 
 

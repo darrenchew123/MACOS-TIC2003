@@ -2,7 +2,7 @@
 #include "StatementProcessing.h"
 
 // Process statement and insert into statement table
-void StatementProcessing::processStatement(const string& procedureName, const string& token, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, vector<StatementInfo> &statementInfo, bool& pendingParentPush, unordered_map<int,int> &parentChildMapping) {
+void StatementProcessing::processStatement(const string& procedureName, const string& token, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, vector<StatementInfo> &statementInfo, bool& pendingParentPush, multimap<int,int> &parentChildMapping) {
     if(statementTypes.size() == 0) return;
     cout << "Processing statement type :" << statementTypes.top() << " at line count: " << lineCount;
     if(!parentStack.empty()){

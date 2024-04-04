@@ -15,7 +15,7 @@ void ProcedureProcessing::processProcedure(bool &inProcedure, string &procedureN
 }
 
 // Process SIMPLE code inside the procedure
-void ProcedureProcessing::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo>& statementInfo, stack<int>& ifStack, bool& pendingParentPush, unordered_map<int,int> &parentChildMapping) {
+void ProcedureProcessing::processInProcedure(const string& token, const string& procedureName, int& i, int& lineCount, const vector<string>& tokens, stack<string>& statementTypes, stack<int>& parentStack, stack<bool>& expressionStack, vector<StatementInfo>& statementInfo, stack<int>& ifStack, bool& pendingParentPush, multimap<int,int> &parentChildMapping) {
     if (TokenProcessing::skipTokenCheck(token, i, tokens)) {
         return;
     }

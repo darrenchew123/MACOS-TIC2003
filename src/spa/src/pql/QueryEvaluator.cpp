@@ -63,6 +63,7 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
     string patternLeftArg;
     string patternRightArg;
     bool isSubexpression = 0;
+    cout << "left arg " << leftArg << " right arg " <<  rightArg << " condition type " << conditionType << endl;
 
     if (!queryToExecute.patterns.empty()) {
         patternType = queryToExecute.patterns[0].patternType;
@@ -113,12 +114,15 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
         if (conditionType == "Modifies") {
             Database::getModifies_OutputProcedures(rightArg, databaseResults, queryToExecute);
         }
+        else if (conditionType == "Uses") {
+            Database::getUses_OutputProcedures(leftArg, databaseResults, queryToExecute);
+        }
         else
             Database::getProcedures(databaseResults);
     }
     else if (selectType == "print") {
-        if (conditionType == "Modifies") {
-            databaseResults.clear();
+        if (conditionType == "Uses") {
+            Database::getUses_OutputType(leftArg,databaseResults,queryToExecute);
         }
         else {
             Database::getStatementType(selectType, databaseResults);
@@ -131,8 +135,13 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
         else if(patternType == "pattern"){
             Database::getVariablesPattern(databaseResults,patternRightArg);
         }
-        else
+        else if (conditionType == "Uses"){
+            cout << "did it come here "<<endl;
+            Database::getUses_OutputVar(leftArg, databaseResults, queryToExecute);
+        }
+        else{
             Database::getVariables(databaseResults);
+        }
     }
     else if (selectType == "constant") {
         if (conditionType == "Parent" && leftArg == "4" && rightArg == "7") {
@@ -150,6 +159,9 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
                 //Select s1 such that Parent(s, s1)
                 Database::getParent_OutputStmt(selectVar, leftArg, rightArg, databaseResults);
             }
+        }
+        else if (conditionType == "Uses"){
+            Database::getUses_OutputStmt(leftArg, databaseResults, queryToExecute);
         }
         else if (conditionType == "Modifies") {
             Database::getModifies_OutputStmt(rightArg, databaseResults,queryToExecute);
@@ -169,6 +181,9 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
                    Database::getParentT_OutputAssign(leftArg, databaseResults);
                 }
             }
+        }
+        else if (conditionType == "Uses"){
+            Database::getUses_OutputType(leftArg,databaseResults,queryToExecute);
         }
         else if (patternType == "pattern") {
             cout << "testing assign " <<endl;

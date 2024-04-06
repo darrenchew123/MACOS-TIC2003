@@ -325,19 +325,71 @@ void Database::insertCalls(const string& caller, const string& callee) {
     sqlite3_exec(dbConnection, insertCallSQL.c_str(), NULL, 0, &errorMessage);
 }
 
-void Database::getUses_OutputVar(string leftArg, vector<string>& results) {
+void Database::getUses_OutputVar(string leftArg, vector<string>& results, Query queryToExecute) {
 
     dbResults.clear();
+    string getUses_OutputVar;
 
-    string getUses_OutputVar = "SELECT variableName FROM Uses WHERE statementCodeLine ='"
-                               + leftArg + "';";
-
-    sqlite3_exec(dbConnection, getUses_OutputVar.c_str(), callback, 0, &errorMessage);
-
-    for (vector<string> dbRow : dbResults) {
-        string var = dbRow.at(0);
-        results.push_back(var);
+    if(queryToExecute.declaredVariables[leftArg]=="procedure"){
+        getUses_OutputVar = "SELECT variableName FROM Uses;";
     }
+    else{
+        getUses_OutputVar = "SELECT variableName FROM Uses WHERE statementCodeLine ='"
+                            + leftArg + "';";
+    }
+    sqlite3_exec(dbConnection, getUses_OutputVar.c_str(), callback, 0, &errorMessage);
+    postProcessDbResults(results, 0);
+}
+
+void Database::getUses_OutputStmt(string leftArg, vector<string>& results, Query queryToExecute) {
+
+    dbResults.clear();
+    string getUses_OutputStmt;
+
+    if(queryToExecute.declaredVariables[leftArg]=="stmt" || leftArg == "_"){
+        getUses_OutputStmt = "SELECT DISTINCT statementCodeLine FROM Uses;";
+    }
+    else{
+        getUses_OutputStmt = "SELECT DISTINCT statementCodeLine FROM Uses WHERE statementCodeLine ='"
+                            + leftArg + "';";
+    }
+    sqlite3_exec(dbConnection, getUses_OutputStmt.c_str(), callback, 0, &errorMessage);
+    postProcessDbResults(results, 0);
+}
+void Database::getUses_OutputType(string leftArg, vector<string>& results, Query queryToExecute) {
+
+    dbResults.clear();
+    string getUses_OutputAssign;
+    string type = queryToExecute.declaredVariables[leftArg];
+
+    if(type == "assign" || type == "print" || leftArg == "_") {
+        getUses_OutputAssign = "SELECT DISTINCT Uses.statementCodeLine\n"
+                               "FROM Uses\n"
+                               "JOIN Statement s ON Uses.statementCodeLine = s.codeLine\n"
+                               "WHERE s.statementType = '" + type + "';";
+    }
+    else {
+        getUses_OutputAssign = "SELECT DISTINCT statementCodeLine FROM Uses WHERE statementCodeLine ='"
+                             + leftArg + "';";
+    }
+    sqlite3_exec(dbConnection, getUses_OutputAssign.c_str(), callback, 0, &errorMessage);
+    postProcessDbResults(results, 0);
+}
+
+
+
+void Database::getUses_OutputProcedures(string leftArg, vector<string>& results, Query queryToExecute){
+    dbResults.clear();
+    string getUses_OutputVar;
+
+    if(queryToExecute.declaredVariables[leftArg]=="procedure"){
+        getUses_OutputVar = "SELECT DISTINCT p.procedureName\n"
+                            "FROM Procedure p\n"
+                            "JOIN Statement s ON p.procedureName = s.procedureName\n"
+                            "JOIN Uses u ON s.codeLine = u.statementCodeLine";
+    }
+    sqlite3_exec(dbConnection, getUses_OutputVar.c_str(), callback, 0, &errorMessage);
+    postProcessDbResults(results, 0);
 }
 
 

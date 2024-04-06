@@ -94,7 +94,13 @@ public:
 
     static void getCombo_Modifies_Pattern_OutputVar(string res, vector<string>& results);
 
-    static void getUses_OutputVar(string leftArg, vector<string>& results);
+    static void getUses_OutputVar(string leftArg, vector<string>& results, Query queryToExecute);
+
+    static void getUses_OutputStmt(string leftArg, vector<string>& results, Query queryToExecute);
+
+    static void getUses_OutputProcedures(string leftArg, vector<string>& results, Query queryToExecute);
+
+    static void getUses_OutputType(string leftArg, vector<string>& results, Query queryToExecute);
 
 private:
     static sqlite3* dbConnection;

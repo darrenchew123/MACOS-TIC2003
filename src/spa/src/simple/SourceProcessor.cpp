@@ -51,7 +51,7 @@ void SourceProcessor::process(string &program) {
     }
 
     ExpressionProcessing::processExpression(statementInfo);
-    ModifiesProcessing::processModifies(statementInfo);
+    ModifiesProcessing::processModifies(statementInfo,parentChildMapping);
     UsesProcessing::processUses(statementInfo);
     CallsProcessing::processCalls(statementInfo);
     AncestorProcessing::processAncestor(parentChildMapping);

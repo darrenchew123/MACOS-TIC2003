@@ -217,8 +217,10 @@ void Database::getVariables(vector<string>& results) {
 void Database::getVariablesPattern(vector<string>& results, string rhsArgs) {
     dbResults.clear();
 
-    string getVariablesPatternSQL = "select LHSExpression from Pattern where RHSExpression like '"
-            + rhsArgs + "';"; ;
+    string getVariablesPatternSQL = "select LHSExpression from Pattern where RHSExpression like '%"
+            + rhsArgs + "%';";
+
+    cout <<"getVariablesPatternSQL " <<getVariablesPatternSQL << endl;
 
     sqlite3_exec(dbConnection, getVariablesPatternSQL.c_str(), callback, 0, &errorMessage);
 

@@ -129,7 +129,7 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
             Database::getModifies_OutputVar(leftArg, databaseResults, queryToExecute);
         }
         else if(patternType == "pattern"){
-            Database::getVariablesPattern(databaseResults,rightArg);
+            Database::getVariablesPattern(databaseResults,patternRightArg);
         }
         else
             Database::getVariables(databaseResults);

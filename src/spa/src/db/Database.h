@@ -65,6 +65,7 @@ public:
 
     static void insertCalls(const string& caller, const string& callee);
 
+    static void insertCallsT(const string& caller, const string& callee);
 
     static void getModifies_OutputVar(string codeLine, vector<string>& results, Query queryToExecute);
 

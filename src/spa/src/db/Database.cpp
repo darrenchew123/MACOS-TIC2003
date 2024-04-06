@@ -22,6 +22,7 @@ void Database::initialize() {
         "DROP TABLE IF EXISTS Statement;"
         "DROP TABLE IF EXISTS Constant;"
         "DROP TABLE IF EXISTS Call;"
+        "DROP TABLE IF EXISTS CallT;"
         "DROP TABLE IF EXISTS Procedure;";
     sqlite3_exec(dbConnection, dropTablesSQL, NULL, 0, &errorMessage);
 
@@ -101,6 +102,15 @@ void Database::initialize() {
             "FOREIGN KEY (procedureCaller) REFERENCES Procedure(procedureName),"
             "FOREIGN KEY (procedureCallee) REFERENCES Procedure(procedureName));";
     sqlite3_exec(dbConnection, createCallTableSQL, NULL, 0, &errorMessage);
+
+    // Create CallT table
+    const char* createCallTTableSQL =
+            "CREATE TABLE CallT ("
+            "procedureCaller VARCHAR(255),"
+            "procedureCallee VARCHAR(255),"
+            "FOREIGN KEY (procedureCaller) REFERENCES Procedure(procedureName),"
+            "FOREIGN KEY (procedureCallee) REFERENCES Procedure(procedureName));";
+    sqlite3_exec(dbConnection, createCallTTableSQL, NULL, 0, &errorMessage);
 
     // initialize the result vector
     dbResults = vector<vector<string>>();
@@ -324,6 +334,14 @@ void Database::insertCalls(const string& caller, const string& callee) {
                            + callee + "');";
     sqlite3_exec(dbConnection, insertCallSQL.c_str(), NULL, 0, &errorMessage);
 }
+
+void Database::insertCallsT(const string& caller, const string& callee) {
+    string insertCallSQL = "INSERT INTO CallT (procedureCaller, procedureCallee) VALUES ('"
+                           + caller + "', '"
+                           + callee + "');";
+    sqlite3_exec(dbConnection, insertCallSQL.c_str(), NULL, 0, &errorMessage);
+}
+
 
 void Database::getUses_OutputVar(string leftArg, vector<string>& results, Query queryToExecute) {
 

@@ -103,6 +103,8 @@ public:
 
     static void getUses_OutputType(string leftArg, vector<string>& results, Query queryToExecute);
 
+    static void getCalls_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute);
+
 private:
     static sqlite3* dbConnection;
 

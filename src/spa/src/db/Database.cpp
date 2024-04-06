@@ -811,4 +811,29 @@ void Database::getCombo_Modifies_Pattern_OutputVar(string res, vector<string>& r
     postProcessDbResults(results, 0);
 }
 
+void Database::getCalls_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute){
+    dbResults.clear();
+    string getCalls_OutputProceduresSQL;
+    string leftType = queryToExecute.declaredVariables[leftArg];
+    string rightType = queryToExecute.declaredVariables[rightArg];
+    if(leftType == "procedure" && rightArg == "_"){
+        getCalls_OutputProceduresSQL = "SELECT procedureCaller FROM Call;";
+    }
+    else if(rightType == "procedure" && leftArg == "_"){
+        getCalls_OutputProceduresSQL = "SELECT procedureCallee FROM Call;";
+    }
+    else if(leftType == "procedure" || leftArg == "_"){
+        getCalls_OutputProceduresSQL = "SELECT procedureCaller FROM Call WHERE procedureCallee = '"
+                                              + rightArg + "'; ";
+    }
+    else if (rightType== "procedure" ){
+        getCalls_OutputProceduresSQL = "SELECT procedureCallee FROM Call WHERE procedureCaller = '"
+                                       + leftArg + "'; ";
+    }
+
+    sqlite3_exec(dbConnection, getCalls_OutputProceduresSQL.c_str(), callback, 0, &errorMessage);
+
+    postProcessDbResults(results, 0);
+}
+
 

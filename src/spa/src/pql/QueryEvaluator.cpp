@@ -63,7 +63,7 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
     string patternLeftArg;
     string patternRightArg;
     bool isSubexpression = 0;
-    cout << "left arg " << leftArg << " right arg " <<  rightArg << " condition type " << conditionType << endl;
+    cout << "left arg " << leftArg << " right arg " <<  rightArg << " select-type " << selectType << endl;
 
     if (!queryToExecute.patterns.empty()) {
         patternType = queryToExecute.patterns[0].patternType;
@@ -116,6 +116,9 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
         }
         else if (conditionType == "Uses") {
             Database::getUses_OutputProcedures(leftArg, databaseResults, queryToExecute);
+        }
+        else if (conditionType == "calls") {
+            Database::getCalls_OutputProcedures(leftArg,rightArg ,databaseResults, queryToExecute);
         }
         else
             Database::getProcedures(databaseResults);

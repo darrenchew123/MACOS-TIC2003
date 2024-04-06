@@ -214,6 +214,16 @@ void Database::getVariables(vector<string>& results) {
 
     postProcessDbResults(results, 0);
 }
+void Database::getVariablesPattern(vector<string>& results, string rhsArgs) {
+    dbResults.clear();
+
+    string getVariablesPatternSQL = "select LHSExpression from Pattern where RHSExpression like '"
+            + rhsArgs + "';"; ;
+
+    sqlite3_exec(dbConnection, getVariablesPatternSQL.c_str(), callback, 0, &errorMessage);
+
+    postProcessDbResults(results, 0);
+}
 
 // method to insert a constant into the database
 void Database::insertConstant(int statementCodeLine, int constantValue) {

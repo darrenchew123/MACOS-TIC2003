@@ -37,6 +37,8 @@ public:
 
     static void getVariables(vector<string>& results);
 
+    static void getVariablesPattern(vector<string>& results, string rhsArgs);
+
     static void insertConstant(int statementCodeLine, int constantValue);
 
     static void getConstants(vector<string>& results);

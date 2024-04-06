@@ -128,6 +128,9 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
         if (conditionType == "Modifies") {
             Database::getModifies_OutputVar(leftArg, databaseResults, queryToExecute);
         }
+        else if(patternType == "pattern"){
+            Database::getVariablesPattern(databaseResults,rightArg);
+        }
         else
             Database::getVariables(databaseResults);
     }

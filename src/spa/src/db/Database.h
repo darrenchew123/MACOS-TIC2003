@@ -105,6 +105,9 @@ public:
 
     static void getCalls_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute);
 
+    static void getCallsT_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute);
+
+
 private:
     static sqlite3* dbConnection;
 

@@ -118,7 +118,11 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
             Database::getUses_OutputProcedures(leftArg, databaseResults, queryToExecute);
         }
         else if (conditionType == "calls") {
-            Database::getCalls_OutputProcedures(leftArg,rightArg ,databaseResults, queryToExecute);
+            if(isT){
+                Database::getCallsT_OutputProcedures(leftArg,rightArg ,databaseResults, queryToExecute);
+            }else {
+                Database::getCalls_OutputProcedures(leftArg,rightArg ,databaseResults, queryToExecute);
+            }
         }
         else
             Database::getProcedures(databaseResults);
@@ -139,7 +143,6 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
             Database::getVariablesPattern(databaseResults,patternRightArg);
         }
         else if (conditionType == "Uses"){
-            cout << "did it come here "<<endl;
             Database::getUses_OutputVar(leftArg, databaseResults, queryToExecute);
         }
         else{
@@ -189,7 +192,6 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
             Database::getUses_OutputType(leftArg,databaseResults,queryToExecute);
         }
         else if (patternType == "pattern") {
-            cout << "testing assign " <<endl;
             Database::getPattern_OutputStmt(patternLeftArg, patternRightArg, isSubexpression, databaseResults, queryToExecute);
         }
         else

@@ -19,7 +19,7 @@ void SourceProcessor::process(string &program) {
     bool pendingParentPush = false;
 
 
-    int lineCount = 0;
+    int lineCount = 1;
     int blockDepth = 0;
     bool inProcedure = false;
     string procedureName;

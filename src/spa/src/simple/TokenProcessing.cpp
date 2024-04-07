@@ -5,7 +5,9 @@ bool TokenProcessing::skipTokenCheck(const string& token, int& i, const vector<s
            token == "/" || token == "then" || tokens.at(i-1) == "call" ||
            (token == "\n" && tokens.at(i-1) == "\n") ||
            (token == "\n" && tokens.at(i-1) == "{" && tokens.at(i-2) == "else") ||
-           (token == "\n" && tokens.at(i-1) == "}");
+           (token == "\n" && tokens.at(i-1) == "}") ||
+           (token == "\n" && tokens.at(i-3) == "procedure");
+
 }
 
 // Process token to respective calls

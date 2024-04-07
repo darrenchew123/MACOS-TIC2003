@@ -2,24 +2,38 @@
 
 void ModifiesProcessing::processModifies(vector<StatementInfo>& statementInfo, multimap<int,int> parentChildMapping) {
     map<int, string> lineToTypeMapping;
-    set<int> insertedParents;
-    for (auto info : statementInfo) {
+    map<int, set<string>> modifiesMap;
+
+    for (const auto& info : statementInfo) {
         lineToTypeMapping[info.lineCount] = info.statementType;
     }
 
     for (const auto& info : statementInfo) {
         std::string variableName = extractModifiesVariable(info.statementContent, info.statementType);
         if (!variableName.empty()) {
-            for (const auto& pair : parentChildMapping) {
-                if (pair.second == info.lineCount) {
-                    int parentLine = pair.first;
-                    string parentStatementType = lineToTypeMapping[parentLine];
-                    if (parentStatementType == "if" || parentStatementType == "while") {
-                        Database::insertModifies(parentLine, variableName);
-                    }
-                }
+            updateModifiesForAncestors(info.lineCount, variableName, parentChildMapping, modifiesMap);
+        }
+    }
+    for (const auto& modifyEntry : modifiesMap) {
+        for (const auto& variable : modifyEntry.second) {
+            Database::insertModifies(modifyEntry.first, variable);
+        }
+    }
+}
+
+void ModifiesProcessing::updateModifiesForAncestors(int line, string& variableName, multimap<int,int> parentChildMapping, map<int, set<string>>& modifiesMap) {
+   stack<int> ancestors;
+    ancestors.push(line);
+
+    while (!ancestors.empty()) {
+        int currentLine = ancestors.top();
+        ancestors.pop();
+
+        modifiesMap[currentLine].insert(variableName);
+        for (const auto& pair : parentChildMapping) {
+            if (pair.second == currentLine) {
+                ancestors.push(pair.first);
             }
-            Database::insertModifies(info.lineCount, variableName);
         }
     }
 }

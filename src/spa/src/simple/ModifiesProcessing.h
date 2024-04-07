@@ -13,5 +13,7 @@ public:
 
     static string extractModifiesVariable(const string& statement, const string& statementType);
 
+    static void updateModifiesForAncestors(int line, string& variableName, multimap<int,int> parentChildMapping, map<int, set<string>>& modifiesMap);
+
 };
 

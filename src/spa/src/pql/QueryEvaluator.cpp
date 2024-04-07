@@ -123,7 +123,7 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
     }
     else if (selectType == "print") {
         if (conditionType == "Uses") {
-            Database::getUses_OutputType(leftArg,databaseResults,queryToExecute);
+            Database::getUses_OutputType(leftArg, rightArg,databaseResults,queryToExecute);
         }
         else if (conditionType == "Parent") {
             if (isT) {
@@ -186,7 +186,7 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
             }
         }
         else if (conditionType == "Uses"){
-            Database::getUses_OutputStmt(leftArg, databaseResults, queryToExecute);
+            Database::getUses_OutputStmt(leftArg, rightArg, databaseResults, queryToExecute);
         }
         else if (conditionType == "Modifies") {
             Database::getModifies_OutputStmt(rightArg, databaseResults,queryToExecute);
@@ -205,7 +205,7 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
             }
         }
         else if (conditionType == "Uses"){
-            Database::getUses_OutputType(leftArg,databaseResults,queryToExecute);
+            Database::getUses_OutputType(leftArg,rightArg,databaseResults,queryToExecute);
         }
         else if (patternType == "pattern") {
             Database::getPattern_OutputStmt(patternLeftArg, patternRightArg, isSubexpression, databaseResults, queryToExecute);

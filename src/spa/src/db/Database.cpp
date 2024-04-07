@@ -322,20 +322,35 @@ void Database::insertCallsT(const string& caller, const string& callee) {
 
 void Database::getUses_OutputVar(string leftArg, vector<string>& results, Query queryToExecute) {
     string getUses_OutputVar;
-
-    if(queryToExecute.declaredVariables[leftArg]=="procedure"){
+    string type = queryToExecute.declaredVariables[leftArg];
+    if(type =="procedure"){
         getUses_OutputVar = "SELECT variableName FROM Uses;";
+    }
+    else if(type == "while" || type == "if" || type == "read" || type == "assign"){
+        getUses_OutputVar = "select variableName\n"
+                                   "FROM Uses WHERE statementCodeLine in (\n"
+                                   "SELECT statementCodeLine from Uses\n"
+                                   "INTERSECT\n"
+                                   "SELECT codeLine from Statement WHERE statementType = '"
+                                   + type + "');";
     }
     else{
         getUses_OutputVar = "SELECT variableName FROM Uses WHERE statementCodeLine ='"
                             + leftArg + "';";
     }
+    cout << "getUses_OutputVar " << getUses_OutputVar <<endl;
     executeAndProcessSQL(getUses_OutputVar,results);
 }
 
-void Database::getUses_OutputStmt(string leftArg, vector<string>& results, Query queryToExecute) {
+void Database::getUses_OutputStmt(string leftArg, string rightArg, vector<string>& results, Query queryToExecute) {
     string getUses_OutputStmt;
-    if(queryToExecute.declaredVariables[leftArg]=="stmt" || leftArg == "_"){
+    string leftType = queryToExecute.declaredVariables[leftArg];
+    string rightType = queryToExecute.declaredVariables[rightArg];
+    if(leftType == "stmt" && rightType == ""){
+        getUses_OutputStmt = "SELECT DISTINCT statementCodeLine FROM Uses WHERE variableName ='"
+                             + rightArg + "';";
+    }
+    else if(leftType =="stmt" || leftArg == "_"){
         getUses_OutputStmt = "SELECT DISTINCT statementCodeLine FROM Uses;";
     }
     else{
@@ -344,20 +359,28 @@ void Database::getUses_OutputStmt(string leftArg, vector<string>& results, Query
     }
     executeAndProcessSQL(getUses_OutputStmt,results);
 }
-void Database::getUses_OutputType(string leftArg, vector<string>& results, Query queryToExecute) {
+void Database::getUses_OutputType(string leftArg, string rightArg, vector<string>& results, Query queryToExecute) {
     string getUses_OutputAssign;
-    string type = queryToExecute.declaredVariables[leftArg];
-
-    if(type == "assign" || type == "print" || leftArg == "_") {
+    string leftType = queryToExecute.declaredVariables[leftArg];
+    string rightType = queryToExecute.declaredVariables[rightArg];
+    if(rightType == "" && (leftType == "assign" || leftType == "print" || leftArg == "_") ){
         getUses_OutputAssign = "SELECT DISTINCT Uses.statementCodeLine\n"
                                "FROM Uses\n"
                                "JOIN Statement s ON Uses.statementCodeLine = s.codeLine\n"
-                               "WHERE s.statementType = '" + type + "';";
+                               "WHERE s.statementType = '" + leftType +
+                               "' AND Uses.variableName = '" + rightArg +"';";
+    }
+    else if(leftType == "assign" || leftType == "print" || leftArg == "_") {
+        getUses_OutputAssign = "SELECT DISTINCT Uses.statementCodeLine\n"
+                               "FROM Uses\n"
+                               "JOIN Statement s ON Uses.statementCodeLine = s.codeLine\n"
+                               "WHERE s.statementType = '" + leftType + "';";
     }
     else {
         getUses_OutputAssign = "SELECT DISTINCT statementCodeLine FROM Uses WHERE statementCodeLine ='"
                              + leftArg + "';";
     }
+    cout << "getUses_OutputAssign " << getUses_OutputAssign << endl;
     executeAndProcessSQL(getUses_OutputAssign,results);
 }
 
@@ -403,7 +426,7 @@ void Database::getModifies_OutputVar(string leftArg, vector<string>& results, Qu
     if(type =="stmt" || type=="procedure"){
         getModifies_OutputVarSQL ="SELECT distinct variableName FROM Modifies;";
     }
-    else if(type == "while" || type == "if" || type == "read"){
+    else if(type == "while" || type == "if" || type == "read" || type == "assign"){
         getModifies_OutputVarSQL = "select variableName\n"
                                    "FROM Modifies WHERE statementCodeLine in (\n"
                                    "SELECT statementCodeLine from Modifies\n"
@@ -422,6 +445,7 @@ void Database::getModifies_OutputVar(string leftArg, vector<string>& results, Qu
 void Database::getModifies_OutputStmt(string rightArg, vector<string>& results, Query queryToExecute) {
 
     string getModifies_OutputStmtSQL;
+    string type = queryToExecute.declaredVariables[rightArg];
     if(queryToExecute.declaredVariables[rightArg]=="variable" || rightArg == "_"){
         getModifies_OutputStmtSQL = "SELECT statementCodeLine FROM Modifies;";
     }
@@ -434,7 +458,8 @@ void Database::getModifies_OutputStmt(string rightArg, vector<string>& results, 
 
 void Database::getModifies_OutputProcedures(string rightArg, vector<string>& results, Query queryToExecute) {
     string getModifies_OutputProceduresSQL;
-    if(queryToExecute.declaredVariables[rightArg]=="variable"){
+    string type = queryToExecute.declaredVariables[rightArg];
+    if(type=="variable") {
         getModifies_OutputProceduresSQL = "SELECT procedureName FROM procedure";
     }
     else{

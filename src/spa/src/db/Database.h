@@ -89,11 +89,11 @@ public:
 
     static void getUses_OutputVar(string leftArg, vector<string>& results, Query queryToExecute);
 
-    static void getUses_OutputStmt(string leftArg, vector<string>& results, Query queryToExecute);
+    static void getUses_OutputStmt(string leftArg, string rightArg, vector<string>& results, Query queryToExecute);
 
     static void getUses_OutputProcedures(string leftArg, vector<string>& results, Query queryToExecute);
 
-    static void getUses_OutputType(string leftArg, vector<string>& results, Query queryToExecute);
+    static void getUses_OutputType(string leftArg, string rightArg,vector<string>& results, Query queryToExecute);
 
     static void getCalls_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute);
 

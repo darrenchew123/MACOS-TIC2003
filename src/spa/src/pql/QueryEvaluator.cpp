@@ -228,7 +228,7 @@ void QueryEvaluator::processSimpleQuery(string selectVar, string selectType, str
     }
     else if (selectType == "while" || selectType == "if") {
         if (conditionType == "Modifies") {
-            QueryProcessor::getModifies_OutputParents(rightArg, selectType, databaseResults,queryToExecute);
+            Database::getModifies_OutputParents(selectType, databaseResults);
         }
         else if (conditionType == "Parent") {
             if (isT) {

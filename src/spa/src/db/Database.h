@@ -73,7 +73,7 @@ public:
 
     static void getModifies_OutputStmt(string rightArg, vector<string>& results, Query queryToExecute);
 
-    static void getModifies_OutputParents(string selectType, string ParentLines, vector<string>& results);
+    static void getModifies_OutputParents(string leftArg, vector<string>& results);
 
     static void getModifies_OutputProcedures(string rightArg, vector<string>& results, Query queryToExecute);
 

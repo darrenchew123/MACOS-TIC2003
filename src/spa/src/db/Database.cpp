@@ -392,22 +392,23 @@ int Database::callback(void* NotUsed, int argc, char** argv, char** azColName) {
 
 void Database::getModifies_OutputVar(string leftArg, vector<string>& results, Query queryToExecute) {
     string getModifies_OutputVarSQL;
-    if(queryToExecute.declaredVariables[leftArg]=="stmt" || queryToExecute.declaredVariables[leftArg]=="procedure"){
+    string type = queryToExecute.declaredVariables[leftArg];
+    if(type =="stmt" || type=="procedure"){
         getModifies_OutputVarSQL ="SELECT distinct variableName FROM Modifies;";
     }
-    else if(queryToExecute.declaredVariables[leftArg]=="read"){
-        getModifies_OutputVarSQL ="SELECT m.variableName \n"
-                                  "FROM Modifies AS m \n"
-                                  "WHERE m.statementCodeLine IN (\n"
-                                  "    SELECT s.codeLine \n"
-                                  "    FROM Statement AS s \n"
-                                  "    WHERE s.statementType = \"read\"\n"
-                                  ");";
+    else if(type == "while" || type == "if" || type == "read"){
+        getModifies_OutputVarSQL = "select variableName\n"
+                                   "FROM Modifies WHERE statementCodeLine in (\n"
+                                   "SELECT statementCodeLine from Modifies\n"
+                                   "INTERSECT\n"
+                                   "SELECT codeLine from Statement WHERE statementType = '"
+                                   + type + "');";
     }
     else{
         getModifies_OutputVarSQL = "SELECT variableName FROM Modifies WHERE statementCodeLine ='"
                                    + leftArg + "';";
     }
+    cout << "getModifies_OutputVarSQL " << getModifies_OutputVarSQL <<endl;
     executeAndProcessSQL(getModifies_OutputVarSQL,results);
 }
 
@@ -480,10 +481,11 @@ void Database::getPattern_OutputStmt(string patternLeftArg, string patternRightA
     executeAndProcessSQL(getPattern_OutputStmtSQL,results);
 }
 
-void Database::getModifies_OutputParents(string selectType, string ParentLines, vector<string>& results) {
-    string getModifies_OutputParentsSQL = "SELECT DISTINCT s.codeLine FROM Statement s JOIN ParentChildRelation p ON s.codeLine = p.parentStatementCodeLine WHERE s.statementType = '"
-                                          + selectType + "' AND s.codeLine IN ("
-                                          + ParentLines + ");";
+void Database::getModifies_OutputParents(string leftArg, vector<string>& results) {
+    string getModifies_OutputParentsSQL = "SELECT statementCodeLine from Modifies\n"
+                                          "INTERSECT\n"
+                                          "SELECT codeLine from Statement WHERE statementType = '"
+                                          + leftArg + "';";
     executeAndProcessSQL(getModifies_OutputParentsSQL,results);
 }
 
@@ -908,3 +910,4 @@ void Database::getParentT(string selectType, string leftArg, string rightArg, ve
     }
     executeAndProcessSQL(getParentSQL,results);
 }
+

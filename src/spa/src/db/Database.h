@@ -39,7 +39,7 @@ public:
 
     static void getVariables(vector<string>& results);
 
-    static void getVariablesPattern(vector<string>& results, string rhsArgs);
+    static void getVariablesPattern(vector<string>& results, string rhsArgs, bool isSubExpression);
 
     static void insertConstant(int statementCodeLine, int constantValue);
 

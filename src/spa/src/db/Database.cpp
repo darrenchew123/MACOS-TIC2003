@@ -224,9 +224,16 @@ void Database::getVariables(vector<string>& results) {
     string getVariablesSQL = "SELECT DISTINCT variableName FROM Variable;";
     executeAndProcessSQL(getVariablesSQL,results);
 }
-void Database::getVariablesPattern(vector<string>& results, string rhsArgs) {
-    string getVariablesPatternSQL = "select LHSExpression from Pattern where RHSExpression like '%"
-            + rhsArgs + "%';";
+void Database::getVariablesPattern(vector<string>& results, string rhsArgs, bool isSubexpression) {
+    string getVariablesPatternSQL;
+    if(isSubexpression){
+        getVariablesPatternSQL = "select LHSExpression from Pattern where RHSExpression like '%"
+                                        + rhsArgs + "%';";
+    }else{
+        getVariablesPatternSQL = "select LHSExpression from Pattern where RHSExpression like '"
+                                 + rhsArgs + "';";
+    }
+    cout << "getVariablesPatternSQL " << getVariablesPatternSQL << endl;
     executeAndProcessSQL(getVariablesPatternSQL,results);
 }
 

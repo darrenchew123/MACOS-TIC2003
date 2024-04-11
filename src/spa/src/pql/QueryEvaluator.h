@@ -10,6 +10,8 @@
 #include "Query.h"
 #include "HandleSimpleQueries.h"
 #include "HandleMultipleConditions.h"
+#include "HandleMultipleSelect.h"
+
 
 
 using namespace std;
@@ -27,5 +29,7 @@ public:
     static void extractConditions(const Query& queryToExecute, string& conditionType, bool& isT, string& leftArg, string& rightArg);
     static void extractPatterns(const Query& queryToExecute, string& patternType, string& patternLeftArg, string& patternRightArg, bool& isSubexpression);\
     static void determineQueryComplexity(const Query& queryToExecute, bool& isMultipleCond, bool& isMultiSelect);
+    static void debugPrintQuery(const Query& queryToExecute);
 
-};
+
+    };

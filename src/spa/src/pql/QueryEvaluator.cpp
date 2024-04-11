@@ -20,6 +20,7 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
 
     selectType = queryToExecute.selectType;
     selectVar = queryToExecute.selectVar;
+    debugPrintQuery(queryToExecute);
 
     extractConditions(queryToExecute, conditionType, isT, leftArg, rightArg);
     extractPatterns(queryToExecute, patternType, patternLeftArg, patternRightArg, isSubexpression);
@@ -27,7 +28,7 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
 
     if (isMultiSelect) {
         cout << "multi select" << endl;
-//        process_multiSelect( queryToExecute, isMultipleCond);
+        HandleMultipleSelect::processMultiSelectQuery( conditionType, isT, leftArg, rightArg, patternType, patternLeftArg, patternRightArg, isSubexpression, databaseResults, queryToExecute, isMultipleCond);
     }
     else if (isMultipleCond) {
         cout << "single select + multicond" << endl;
@@ -39,35 +40,6 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
     output.insert(output.end(), databaseResults.begin(), databaseResults.end());
 }
 
-
-//void QueryEvaluator::process_multiSelect(Query queryToExecute, bool isMultiSelect ) {
-//    vector<vector<string>> allResults;
-//
-//    // Example loop over conditions
-//    for (auto& selectVar : queryToExecute.multiSelectVar) {
-//        vector<string> result = evaluateSimpleQuery(selectVar,queryToExecute.declaredVariables[selectVar],queryToExecute.conditions,);
-//        allResults.push_back(result);
-//    }
-//
-//    // Now merge based on AND or OR logic
-//    vector<string> mergedResults;
-//    if (isAndLogic) {
-//        // Start with the first result set
-//        mergedResults = allResults[0];
-//
-//        // Intersect with each subsequent result set
-//        for (size_t i = 1; i < allResults.size(); ++i) {
-//            mergedResults = intersectResults(mergedResults, allResults[i]);
-//        }
-//    } else { // OR logic
-//        // Simply take the union of all result sets
-//        for (auto& result : allResults) {
-//            mergedResults = unionResults(mergedResults, result);
-//        }
-//    }
-//
-//    // Now 'mergedResults' contains the final result according to the specified logic
-//}
 
 
 void QueryEvaluator::extractConditions(const Query& queryToExecute, string& conditionType, bool& isT, string& leftArg, string& rightArg) {
@@ -100,3 +72,39 @@ void QueryEvaluator::determineQueryComplexity(const Query& queryToExecute, bool&
     cout << "isMultipleCond= " << isMultipleCond << " isMultiSelect= " << isMultiSelect << endl;
 }
 
+void QueryEvaluator::debugPrintQuery(const Query& queryToExecute) {
+    cout << "Conditions:\n";
+    for (const auto& condition : queryToExecute.conditions) {
+        cout << "  Condition Type: " << condition.conditionType
+             << ", Left Arg: " << condition.leftArg
+             << ", Right Arg: " << condition.rightArg
+             << ", isT: " << condition.isT << "\n";
+    }
+
+    cout << "Patterns:\n";
+    for (const auto& pattern : queryToExecute.patterns) {
+        cout << "  Pattern Type: " << pattern.patternType
+             << ", Pattern Var: " << pattern.patternVar
+             << ", Left Arg: " << pattern.patternLeftArg
+             << ", Right Arg: " << pattern.patternRightArg
+             << ", isSubexpression: " << pattern.isSubexpression << "\n";
+    }
+
+    cout << "Declared Variables:\n";
+    for (const auto& var : queryToExecute.declaredVariables) {
+        cout << "  Var Name: " << var.first << ", Var Type: " << var.second << "\n";
+    }
+
+    cout << "Multi Select Types:\n";
+    for (const auto& type : queryToExecute.multiSelectType) {
+        cout << "  Type: " << type << "\n";
+    }
+
+    cout << "Multi Select Vars:\n";
+    for (const auto& var : queryToExecute.multiSelectVar) {
+        cout << "  Var: " << var << "\n";
+    }
+
+    cout << "Select Type: " << queryToExecute.selectType << "\n";
+    cout << "Select Var: " << queryToExecute.selectVar << "\n";
+}

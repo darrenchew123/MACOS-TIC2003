@@ -1127,4 +1127,28 @@ bool Database::checkCallsRelationship(string caller, string callee) {
 
     return exists;
 }
+bool Database::checkParentRelationship(string parent, string child) {
+    sqlite3_stmt* stmt = nullptr;
+    std::string sqlQuery = "SELECT 1 FROM Call WHERE procedureCaller = ? AND procedureCallee = ?";
+
+    if (sqlite3_prepare_v2(dbConnection, sqlQuery.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(dbConnection) << std::endl;
+        return false;
+    }
+
+    if (sqlite3_bind_text(stmt, 1, parent.c_str(), -1, SQLITE_STATIC) != SQLITE_OK ||
+        sqlite3_bind_text(stmt, 2, child.c_str(), -1, SQLITE_STATIC) != SQLITE_OK) {
+        std::cerr << "Failed to bind parameters: " << sqlite3_errmsg(dbConnection) << std::endl;
+        sqlite3_finalize(stmt);
+        return false;
+    }
+
+    bool exists = false;
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        exists = true;
+    }
+    sqlite3_finalize(stmt);
+
+    return exists;
+}
 

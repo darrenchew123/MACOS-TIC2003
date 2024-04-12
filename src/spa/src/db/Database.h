@@ -105,6 +105,9 @@ public:
 
     static bool checkCallsRelationship(string caller, string callee);
 
+    static bool checkParentRelationship(string parent, string child);
+
+
 private:
     static sqlite3* dbConnection;
 

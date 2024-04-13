@@ -423,6 +423,7 @@ int Database::callback(void* NotUsed, int argc, char** argv, char** azColName) {
 void Database::getModifies_OutputVar(string leftArg, vector<string>& results, Query queryToExecute) {
     string getModifies_OutputVarSQL;
     string type = queryToExecute.declaredVariables[leftArg];
+
     if(type =="stmt" || type=="procedure"){
         getModifies_OutputVarSQL ="SELECT distinct variableName FROM Modifies;";
     }
@@ -1221,6 +1222,20 @@ bool Database::checkParentTRelationship(string parent, string child) {
 bool Database::checkParentRelationship(string parent, string child) {
     std::string sql = "SELECT 1 FROM ParentChildRelation WHERE parentStatementCodeLine = ? AND childStatementCodeLine = ?";
     return executeCheckQuery(sql, {parent, child});
+}
+
+bool Database::checkModifiesRelationship(string statementCodeLine, string variableName, string statementType) {
+    // SQL query that joins the Modifies and Statement tables to check for the type of statement
+    std::string sqlQuery = R"(
+        SELECT EXISTS(
+            SELECT 1 FROM Modifies m
+            JOIN Statement s ON m.statementCodeLine = s.codeLine
+            WHERE m.statementCodeLine = ? AND m.variableName = ? AND s.statementType = ?
+        )
+    )";
+
+    // Execute the query with the specified parameters
+    return executeCheckQuery(sqlQuery, {statementCodeLine, variableName, statementType});
 }
 
 

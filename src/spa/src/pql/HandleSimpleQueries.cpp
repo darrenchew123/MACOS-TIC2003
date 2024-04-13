@@ -96,8 +96,9 @@ void HandleSimpleQueries::handleAssignSelectType(const string& conditionType, bo
     } else if (conditionType == "Uses") {
         Database::getUses_OutputType(leftArg, rightArg, databaseResults, queryToExecute);
     } else if (patternType == "pattern") {
-        Database::getPattern_OutputStmt(patternLeftArg, patternRightArg, isSubexpression, databaseResults, queryToExecute);
-    } else {
+        Database::getPattern_OutputStmt(patternLeftArg, patternRightArg, isSubexpression, databaseResults,
+                                        queryToExecute);
+    }else {
         Database::getStatementType(selectType, databaseResults);
     }
 }

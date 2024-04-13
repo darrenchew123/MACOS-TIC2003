@@ -98,7 +98,7 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
             auto leftIndex = find(entityOrder.begin(), entityOrder.end(), condition.leftArg) - entityOrder.begin();
             auto rightIndex = find(entityOrder.begin(), entityOrder.end(), condition.rightArg) - entityOrder.begin();
 
-            if (checkRelationship(condition.conditionType, combo[leftIndex], combo[rightIndex], condition.isT)) {
+            if (checkRelationship(condition.conditionType, combo[leftIndex], combo[rightIndex], condition.isT,queryToExecute,condition)) {
                 tempValidCombinations.push_back(combo);
             }
         }
@@ -115,7 +115,7 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
 }
 
 
-bool HandleMultipleSelect::checkRelationship(string relationshipType, string entity1, string entity2, bool isT) {
+bool HandleMultipleSelect::checkRelationship(string relationshipType, string entity1, string entity2, bool isT, Query queryToExecute, Condition condition) {
     if (relationshipType == "Calls" && isT) {
         return Database::checkCallsTRelationship(entity1, entity2);
     }
@@ -127,6 +127,9 @@ bool HandleMultipleSelect::checkRelationship(string relationshipType, string ent
     }
     else if (relationshipType == "Parent") {
         return Database::checkParentRelationship(entity1, entity2);
+    }
+    else if (relationshipType == "Modifies") {
+        return Database::checkModifiesRelationship(entity1, entity2, queryToExecute.declaredVariables[condition.leftArg]);
     }
     return false;
 }

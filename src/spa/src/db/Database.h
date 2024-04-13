@@ -69,7 +69,7 @@ public:
 
     static void insertCallsT(const string& caller, const string& callee);
 
-    static void getModifies_OutputVar(string codeLine, vector<string>& results, Query queryToExecute);
+    static void getModifies_OutputVar(string leftArg, vector<string>& results, Query queryToExecute);
 
     static void getModifies_OutputStmt(string rightArg, vector<string>& results, Query queryToExecute);
 
@@ -113,6 +113,7 @@ public:
 
     static bool checkParentTRelationship(string parent, string child);
 
+    static bool checkModifiesRelationship(string statementCodeLine, string variableName, string statementType);
 
 private:
     static sqlite3* dbConnection;

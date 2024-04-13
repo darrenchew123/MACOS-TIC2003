@@ -20,6 +20,7 @@ void QueryEvaluator::evaluate(string query, vector<string>& output) {
 
     selectType = queryToExecute.selectType;
     selectVar = queryToExecute.selectVar;
+    cout << queryToExecute.selectVar << " queryToExecute.selectVar"<< endl;
     debugPrintQuery(queryToExecute);
 
     extractConditions(queryToExecute, conditionType, isT, leftArg, rightArg);

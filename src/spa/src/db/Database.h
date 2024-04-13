@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <optional>
 #include "sqlite3.h"
 #include "pql/Query.h"
 
@@ -113,7 +114,7 @@ public:
 
     static bool checkParentTRelationship(string parent, string child);
 
-    static bool checkModifiesRelationship(string statementCodeLine, string variableName, string statementType);
+    static bool checkModifiesRelationship(string statementCodeLine, string variableName,  optional<string> statementType);
 
 private:
     static sqlite3* dbConnection;

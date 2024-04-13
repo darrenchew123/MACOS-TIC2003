@@ -1224,18 +1224,24 @@ bool Database::checkParentRelationship(string parent, string child) {
     return executeCheckQuery(sql, {parent, child});
 }
 
-bool Database::checkModifiesRelationship(string statementCodeLine, string variableName, string statementType) {
-    // SQL query that joins the Modifies and Statement tables to check for the type of statement
+bool Database::checkModifiesRelationship(string statementCodeLine, string variableName,  optional<string> statementType = nullopt) {
     std::string sqlQuery = R"(
         SELECT EXISTS(
             SELECT 1 FROM Modifies m
             JOIN Statement s ON m.statementCodeLine = s.codeLine
-            WHERE m.statementCodeLine = ? AND m.variableName = ? AND s.statementType = ?
-        )
+            WHERE m.statementCodeLine = ? AND m.variableName = ?
     )";
 
-    // Execute the query with the specified parameters
-    return executeCheckQuery(sqlQuery, {statementCodeLine, variableName, statementType});
+    std::vector<std::string> params = {statementCodeLine, variableName};
+
+    if (statementType) {
+        sqlQuery += " AND s.statementType = ?";
+        params.push_back(*statementType);
+    }
+
+    sqlQuery += ")";
+
+    return executeCheckQuery(sqlQuery, params);
 }
 
 

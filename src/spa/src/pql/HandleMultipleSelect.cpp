@@ -98,7 +98,7 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
             auto leftIndex = find(entityOrder.begin(), entityOrder.end(), condition.leftArg) - entityOrder.begin();
             auto rightIndex = find(entityOrder.begin(), entityOrder.end(), condition.rightArg) - entityOrder.begin();
 
-            if (checkRelationship(condition.conditionType, combo[leftIndex], combo[rightIndex], queryToExecute)) {
+            if (checkRelationship(condition.conditionType, combo[leftIndex], combo[rightIndex], condition.isT)) {
                 tempValidCombinations.push_back(combo);
             }
         }
@@ -115,8 +115,14 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
 }
 
 
-bool HandleMultipleSelect::checkRelationship(const string& relationshipType, const string& entity1, const string& entity2, const Query& query) {
-    if (relationshipType == "Calls") {
+bool HandleMultipleSelect::checkRelationship(string relationshipType, string entity1, string entity2, bool isT) {
+    if (relationshipType == "Calls" && isT) {
+        return Database::checkCallsTRelationship(entity1, entity2);
+    }
+    else if (relationshipType == "Parent" && isT) {
+        return Database::checkParentTRelationship(entity1, entity2);
+    }
+    else if (relationshipType == "Calls") {
         return Database::checkCallsRelationship(entity1, entity2);
     }
     else if (relationshipType == "Parent") {
@@ -132,9 +138,9 @@ void HandleMultipleSelect::generateCombinations(unordered_map<string, pair<int, 
         return;
     }
 
-    const string& key = entityOrder[index];
+    string key = entityOrder[index];
     const vector<string>& entities = resultsMap.at(key).second;
-    for (const string& entity : entities) {
+    for (string entity : entities) {
         current.push_back(entity);
         generateCombinations(resultsMap, entityOrder, index + 1, current, allCombinations);
         current.pop_back();

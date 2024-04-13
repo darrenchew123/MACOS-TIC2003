@@ -103,9 +103,15 @@ public:
 
     static void getParentT(string selectVar, string selectType, string leftArg, string rightArg, vector<string>& results, Query query);
 
+    static bool executeCheckQuery(string sqlQuery, vector<string> params);
+
     static bool checkCallsRelationship(string caller, string callee);
 
     static bool checkParentRelationship(string parent, string child);
+
+    static bool checkCallsTRelationship(string caller, string callee);
+
+    static bool checkParentTRelationship(string parent, string child);
 
 
 private:

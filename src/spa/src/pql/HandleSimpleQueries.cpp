@@ -95,7 +95,7 @@ void HandleSimpleQueries::handleStmtSelectType(const string& conditionType, bool
     } else if (conditionType == "Uses") {
         Database::getUses_OutputStmt(leftArg, rightArg, databaseResults, queryToExecute);
     } else if (conditionType == "Modifies") {
-        Database::getModifies_OutputStmt(rightArg, databaseResults, queryToExecute);
+        Database::getModifies_OutputStmt(leftArg, rightArg, databaseResults, queryToExecute);
     } else {
         Database::getStatements(databaseResults);
     }
@@ -109,6 +109,8 @@ void HandleSimpleQueries::handleAssignSelectType(const string& conditionType, bo
     } else if (patternType == "pattern") {
         Database::getPattern_OutputStmt(patternLeftArg, patternRightArg, isSubexpression, databaseResults,
                                         queryToExecute);
+    } else if (conditionType == "Modifies") {
+        Database::getModifies_OutputStmt(leftArg, rightArg, databaseResults, queryToExecute);
     }else {
         Database::getStatementType(selectType, databaseResults);
     }

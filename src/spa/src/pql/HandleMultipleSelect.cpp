@@ -21,7 +21,7 @@ void HandleMultipleSelect::processMultiSelectQuery(string conditionType, bool is
         } else {
             HandleSimpleQueries::processSimpleQuery(selectVar, queryToExecute.declaredVariables[selectVar], conditionType, isT, leftArg, rightArg, patternType, patternLeftArg, patternRightArg, isSubexpression, tempResults, queryToExecute);
         }
-        cout << "Processing query for variable: " << selectVar << endl;
+        cout << "Processing query for variable: " << selectVar << " type "  << queryToExecute.declaredVariables[selectVar]<< endl;
         for (auto result : tempResults) {
             cout << "  Result: " << result << endl;
         }
@@ -87,9 +87,9 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
     vector<vector<string>> allCombinations;
     vector<string> current;
 
-    generateCombinations(resultsMap, entityOrder, 0, current, allCombinations);
 
-    vector<vector<string>> validCombinations = allCombinations;  // Start with all combinations as valid
+    generateCombinations(resultsMap, entityOrder, 0, current, allCombinations);
+    vector<vector<string>> validCombinations = allCombinations;
 
     for (const auto& condition : queryToExecute.conditions) {
         vector<vector<string>> tempValidCombinations;
@@ -105,21 +105,7 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
 
         validCombinations = tempValidCombinations;
     }
-    for (const auto& pattern : queryToExecute.patterns) {
-        vector<vector<string>> tempValidCombinations;
 
-        for (const auto& combo : validCombinations) {
-            auto leftIndex = find(entityOrder.begin(), entityOrder.end(), pattern.patternLeftArg) - entityOrder.begin();
-            auto rightIndex = find(entityOrder.begin(), entityOrder.end(), pattern.patternRightArg) - entityOrder.begin();
-
-            // Assuming checkRelationship can handle Pattern objects; adapt as necessary
-            if (checkRelationship(pattern.patternType, combo[leftIndex], combo[rightIndex], pattern.isSubexpression, queryToExecute, Condition(), pattern)) {
-                tempValidCombinations.push_back(combo);
-            }
-        }
-
-        validCombinations = tempValidCombinations; // Update valid combinations after each pattern
-    }
     for (const auto& combo : validCombinations) {
         stringstream result;
         copy(combo.begin(), combo.end(), ostream_iterator<string>(result, " "));
@@ -131,9 +117,6 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
 
 
 bool HandleMultipleSelect::checkRelationship(string relationshipType, string entity1, string entity2, bool isT, Query queryToExecute, Condition condition, Pattern pattern) {
-//    if (relationshipType == "pattern") {
-//        return Database::checkCallsTRelationship(entity1, entity2);
-//    }
     if (relationshipType == "Calls" && isT) {
         return Database::checkCallsTRelationship(entity1, entity2);
     }

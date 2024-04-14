@@ -226,12 +226,27 @@ void Database::getVariables(vector<string>& results) {
 }
 void Database::getVariablesPattern(vector<string>& results,string lhsArgs ,string rhsArgs, bool isSubexpression, Query query) {
     string getVariablesPatternSQL;
+    string lhsType = query.declaredVariables[lhsArgs];
+    string rhsType = query.declaredVariables[rhsArgs];
     if(isSubexpression){
-        getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where RHSExpression like '%"
-                                        + rhsArgs + "%';";
+        if(lhsType == "variable"){
+            getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where RHSExpression like '%"
+                                     + rhsArgs + "%';";
+        }else {
+            getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where LHSExpression like '%"
+                                     + lhsArgs + "%';";
+        }
+
     }else{
-        if (rhsArgs == "_") {
+        if ((lhsArgs == "_" || lhsType == "variable" ) && (rhsArgs == "_" || rhsType == "variable") ) {
             getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern;";
+        }
+        else if ( lhsType == "" && (rhsArgs == "_" || rhsType == "variable" )) {
+            getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where LHSExpression = '"
+                                     + lhsArgs + "';";
+        } else if ( (lhsArgs == "_" || lhsType == "variable") && rhsType == "") {
+            getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where RHSExpression = '"
+                                     + rhsArgs + "';";
         }
         else
             getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where RHSExpression like '"
@@ -374,30 +389,6 @@ void Database::getUses_OutputStmt(string leftArg, string rightArg, vector<string
     }
     executeAndProcessSQL(getUses_OutputStmt,results);
 }
-//void Database::getUses_OutputType(string leftArg, string rightArg, vector<string>& results, Query queryToExecute) {
-//    string getUses_OutputAssign;
-//    string leftType = queryToExecute.declaredVariables[leftArg];
-//    string rightType = queryToExecute.declaredVariables[rightArg];
-//    if(rightType == "" && (leftType == "assign" || leftType == "print" || leftArg == "_") ){
-//        getUses_OutputAssign = "SELECT DISTINCT Uses.statementCodeLine\n"
-//                               "FROM Uses\n"
-//                               "JOIN Statement s ON Uses.statementCodeLine = s.codeLine\n"
-//                               "WHERE s.statementType = '" + leftType +
-//                               "' AND Uses.variableName = '" + rightArg +"';";
-//    }
-//    else if(leftType == "assign" || leftType == "print" || leftArg == "_") {
-//        getUses_OutputAssign = "SELECT DISTINCT Uses.statementCodeLine\n"
-//                               "FROM Uses\n"
-//                               "JOIN Statement s ON Uses.statementCodeLine = s.codeLine\n"
-//                               "WHERE s.statementType = '" + leftType + "';";
-//    }
-//    else {
-//        getUses_OutputAssign = "SELECT DISTINCT statementCodeLine FROM Uses WHERE statementCodeLine ='"
-//                             + leftArg + "';";
-//    }
-//    cout << "getUses_OutputAssign " << getUses_OutputAssign << endl;
-//    executeAndProcessSQL(getUses_OutputAssign,results);
-//}
 
 void Database::getUses_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute){
     string getUses_OutputVar;

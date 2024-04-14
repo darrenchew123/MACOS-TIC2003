@@ -81,8 +81,6 @@ public:
 
     static void getModifies_OutputProcedures(string rightArg, vector<string>& results, Query queryToExecute);
 
-    static void getStatements_OutputAssign(vector<string>& results);
-
     static void getPattern_OutputStmt(string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& results, Query queryToExecute);
 
     static void getCombo_Modifies_Pattern_OutputProcedure(string res, vector<string>& results);

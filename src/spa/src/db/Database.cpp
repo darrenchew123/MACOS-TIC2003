@@ -499,15 +499,6 @@ void Database::getModifies_OutputProcedures(string rightArg, vector<string>& res
     executeAndProcessSQL(getModifies_OutputProceduresSQL,results);
 }
 
-void Database::getStatements_OutputAssign(vector<string>& results) {
-
-    dbResults.clear();
-
-    string getStatements_OutputAssignSQL = "SELECT codeLine FROM Statement WHERE statementType = 'assign';";
-    sqlite3_exec(dbConnection, getStatements_OutputAssignSQL.c_str(), callback, 0, &errorMessage);
-
-    postProcessDbResults(results, 0);
-}
 
 void Database::getPattern_OutputStmt(string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& results, Query queryToExecute) {
     string getPattern_OutputStmtSQL;

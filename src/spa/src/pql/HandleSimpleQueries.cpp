@@ -6,7 +6,7 @@ void HandleSimpleQueries::processSimpleQuery(string selectVar, string selectType
     } else if (selectType == "print") {
         handlePrintSelectType(conditionType, isT, selectVar, selectType, leftArg, rightArg, databaseResults, queryToExecute);
     }else if (selectType == "variable") {
-        handleVariableSelectType(conditionType, isT, selectVar, selectType, leftArg, rightArg, patternType, patternRightArg, isSubexpression, databaseResults, queryToExecute);
+        handleVariableSelectType(conditionType, isT, selectVar, selectType, leftArg, rightArg, patternType, patternLeftArg ,patternRightArg, isSubexpression, databaseResults, queryToExecute);
     } else if (selectType == "constant") {
         handleConstantSelectType(conditionType,isT, selectVar, selectType, leftArg, rightArg, databaseResults, queryToExecute);
     }else if (selectType == "stmt") {
@@ -56,13 +56,13 @@ void HandleSimpleQueries::handleParentCondition(bool isT, const string& selectVa
     }
 }
 
-void HandleSimpleQueries::handleVariableSelectType(const string& conditionType, bool isT, const string& selectVar, const string& selectType, const string& leftArg, const string& rightArg, const string& patternType, const string& patternRightArg, bool isSubexpression, vector<string>& databaseResults, Query& queryToExecute) {
+void HandleSimpleQueries::handleVariableSelectType(const string& conditionType, bool isT, const string& selectVar, const string& selectType, const string& leftArg, const string& rightArg, const string& patternType, const string& patternLeftArg,const string& patternRightArg, bool isSubexpression, vector<string>& databaseResults, Query& queryToExecute) {
     if (conditionType == "Modifies") {
         Database::getModifies_OutputVar(leftArg, databaseResults, queryToExecute);
     } else if (conditionType == "Parent") {
         handleParentCondition(isT, selectVar, selectType, leftArg, rightArg, databaseResults, queryToExecute);
     } else if (patternType == "pattern") {
-        Database::getVariablesPattern(databaseResults, patternRightArg, isSubexpression);
+        Database::getVariablesPattern(databaseResults, patternLeftArg ,patternRightArg, isSubexpression, queryToExecute);
     } else if (conditionType == "Uses") {
         Database::getUses_OutputVar(leftArg, databaseResults, queryToExecute);
     } else {
@@ -124,7 +124,7 @@ void HandleSimpleQueries::handleControlFlowSelectType(const string& conditionTyp
         }
     } else if (patternType == "pattern") {
         Database::getPattern_OutputStmt(patternLeftArg, patternRightArg, isSubexpression, databaseResults, queryToExecute);
-    } else {
+    }else {
         Database::getStatementType(selectType, databaseResults);
     }
 }

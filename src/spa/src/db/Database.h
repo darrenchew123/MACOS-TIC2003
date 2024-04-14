@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <optional>
 #include "sqlite3.h"
 #include "pql/Query.h"
 #include "ParentT_HelperFunctions.h"
@@ -43,7 +42,7 @@ public:
 
     static void getVariables(vector<string>& results);
 
-    static void getVariablesPattern(vector<string>& results, string rhsArgs, bool isSubExpression);
+    static void getVariablesPattern(vector<string>& results, string lhsArgs ,string rhsArgs, bool isSubExpression, Query query);
 
     static void insertConstant(int statementCodeLine, int constantValue);
 
@@ -117,7 +116,7 @@ public:
 
     static bool checkParentTRelationship(string parent, string child);
 
-    static bool checkModifiesRelationship(string statementCodeLine, string variableName,  optional<string> statementType);
+    static bool checkModifiesRelationship(string statementCodeLine, string variableName, string statementType);
 
     static void prepareContext_Parent(const std::unordered_map<std::string, std::string>& declaredVariables,
                                       const std::string& leftArg, const std::string& rightArg,

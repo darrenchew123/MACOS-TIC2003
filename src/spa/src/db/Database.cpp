@@ -224,14 +224,19 @@ void Database::getVariables(vector<string>& results) {
     string getVariablesSQL = "SELECT DISTINCT variableName FROM Variable;";
     executeAndProcessSQL(getVariablesSQL,results);
 }
-void Database::getVariablesPattern(vector<string>& results, string rhsArgs, bool isSubexpression) {
+void Database::getVariablesPattern(vector<string>& results,string lhsArgs ,string rhsArgs, bool isSubexpression, Query query) {
     string getVariablesPatternSQL;
     if(isSubexpression){
         getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where RHSExpression like '%"
                                         + rhsArgs + "%';";
     }else{
-        getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where RHSExpression like '"
-                                 + rhsArgs + "';";
+        if (rhsArgs == "_") {
+            getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where LHSExpression like '"
+                                     + lhsArgs + "';";
+        }
+        else
+            getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where RHSExpression like '"
+                    + rhsArgs + "';";
     }
     cout << "getVariablesPatternSQL " << getVariablesPatternSQL << endl;
     executeAndProcessSQL(getVariablesPatternSQL,results);
@@ -436,7 +441,7 @@ void Database::getModifies_OutputVar(string leftArg, vector<string>& results, Qu
         getModifies_OutputVarSQL ="SELECT distinct variableName FROM Modifies;";
     }
     else if(type == "while" || type == "if" || type == "read" || type == "assign"){
-        getModifies_OutputVarSQL = "select variableName\n"
+        getModifies_OutputVarSQL = "select DISTINCT variableName\n"
                                    "FROM Modifies WHERE statementCodeLine in (\n"
                                    "SELECT statementCodeLine from Modifies\n"
                                    "INTERSECT\n"
@@ -444,7 +449,7 @@ void Database::getModifies_OutputVar(string leftArg, vector<string>& results, Qu
                                    + type + "');";
     }
     else{
-        getModifies_OutputVarSQL = "SELECT variableName FROM Modifies WHERE statementCodeLine ='"
+        getModifies_OutputVarSQL = "SELECT DISTINCT variableName FROM Modifies WHERE statementCodeLine ='"
                                    + leftArg + "';";
     }
     cout << "getModifies_OutputVarSQL " << getModifies_OutputVarSQL <<endl;
@@ -566,13 +571,13 @@ void Database::getCalls_OutputProcedures(string leftArg, string rightArg, vector
     string leftType = queryToExecute.declaredVariables[leftArg];
     string rightType = queryToExecute.declaredVariables[rightArg];
     if(leftType == "procedure" && rightArg == "_"){
-        getCalls_OutputProceduresSQL = "SELECT procedureCaller FROM Call;";
+        getCalls_OutputProceduresSQL = "SELECT DISTINCT procedureCaller FROM Call;";
     }
     else if(rightType == "procedure" && leftArg == "_"){
         getCalls_OutputProceduresSQL = "SELECT procedureCallee FROM Call;";
     }
     else if(leftType == "procedure" || leftArg == "_"){
-        getCalls_OutputProceduresSQL = "SELECT procedureCaller FROM Call WHERE procedureCallee = '"
+        getCalls_OutputProceduresSQL = "SELECT DISTINCT procedureCaller FROM Call WHERE procedureCallee = '"
                                               + rightArg + "'; ";
     }
     else if (rightType== "procedure"|| rightArg == "_" ){
@@ -587,7 +592,8 @@ void Database::getCallsT_OutputProcedures(string leftArg, string rightArg, vecto
     string leftType = queryToExecute.declaredVariables[leftArg];
     string rightType = queryToExecute.declaredVariables[rightArg];
     if(leftType == "procedure" && rightArg == "_"){
-        getCallsT_OutputProceduresSQL = "SELECT procedureCaller FROM CallT;";
+        getCallsT_OutputProceduresSQL = "SELECT DISTINCT procedureCaller FROM CallT WHERE procedureCallee = '"
+                                        + rightArg + "'; ";
     }
     else if(rightType == "procedure" && leftArg == "_"){
         getCallsT_OutputProceduresSQL = "SELECT procedureCallee FROM CallT;";
@@ -749,7 +755,7 @@ bool Database::checkParentRelationship(string parent, string child) {
     return executeCheckQuery(sql, {parent, child});
 }
 
-bool Database::checkModifiesRelationship(string statementCodeLine, string variableName,  optional<string> statementType = nullopt) {
+bool Database::checkModifiesRelationship(string statementCodeLine, string variableName, string statementType) {
     std::string sqlQuery = R"(
         SELECT EXISTS(
             SELECT 1 FROM Modifies m
@@ -757,11 +763,11 @@ bool Database::checkModifiesRelationship(string statementCodeLine, string variab
             WHERE m.statementCodeLine = ? AND m.variableName = ?
     )";
 
-    std::vector<std::string> params = {statementCodeLine, variableName};
+    vector<string> params = {statementCodeLine, variableName};
 
-    if (statementType) {
+    if (statementType!="") {
         sqlQuery += " AND s.statementType = ?";
-        params.push_back(*statementType);
+        params.push_back(statementType);
     }
 
     sqlQuery += ")";

@@ -6,7 +6,6 @@
 #include "../db/Database.h"
 #include "../utils/Tokenizer.h"
 #include "QueryParser.h"
-#include "QueryProcessor.h"
 #include "Query.h"
 #include "HandleSimpleQueries.h"
 

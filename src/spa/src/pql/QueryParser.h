@@ -6,7 +6,6 @@
 #include "../db/Database.h"
 #include "../utils/Tokenizer.h"
 #include "../utils/InfixToPostfix.h"
-#include "../pql/QueryProcessor.h"
 #include <unordered_set>
 using namespace std;
 

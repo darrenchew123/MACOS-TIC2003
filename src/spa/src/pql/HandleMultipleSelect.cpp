@@ -98,7 +98,7 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
             auto leftIndex = find(entityOrder.begin(), entityOrder.end(), condition.leftArg) - entityOrder.begin();
             auto rightIndex = find(entityOrder.begin(), entityOrder.end(), condition.rightArg) - entityOrder.begin();
 
-            if (checkRelationship(condition.conditionType, combo[leftIndex], combo[rightIndex], condition.isT,queryToExecute,condition, Pattern())) {
+            if (checkRelationship(condition.conditionType, combo[leftIndex], combo[rightIndex], condition.isT,queryToExecute,condition)) {
                 tempValidCombinations.push_back(combo);
             }
         }
@@ -116,7 +116,7 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
 }
 
 
-bool HandleMultipleSelect::checkRelationship(string relationshipType, string entity1, string entity2, bool isT, Query queryToExecute, Condition condition, Pattern pattern) {
+bool HandleMultipleSelect::checkRelationship(string relationshipType, string entity1, string entity2, bool isT, Query queryToExecute, Condition condition) {
     if (relationshipType == "Calls" && isT) {
         return Database::checkCallsTRelationship(entity1, entity2);
     }

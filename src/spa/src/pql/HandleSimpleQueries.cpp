@@ -32,7 +32,17 @@ void HandleSimpleQueries::handleProcedureSelectType(string selectVar,const strin
         } else {
             Database::getCalls_OutputProcedures(selectVar, leftArg, rightArg, databaseResults, queryToExecute);
         }
-    } else {
+    }
+    else if (conditionType == "Parent") {
+        if (isT) {
+            Database::getParentT(queryToExecute.selectVar, queryToExecute.selectType, leftArg, rightArg,
+                                 databaseResults, queryToExecute);
+        } else {
+            Database::getParent(queryToExecute.selectVar, queryToExecute.selectType, leftArg, rightArg, databaseResults,
+                                queryToExecute);
+        }
+    }
+    else {
         Database::getProcedures(databaseResults);
     }
 }

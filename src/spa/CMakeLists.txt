@@ -27,7 +27,8 @@ add_library(spa ${db} ${pql} ${simple} ${utils}
         src/simple/AncestorProcessing.h
         src/pql/HandleSimpleQueries.cpp
         src/pql/HandleMultipleConditions.cpp
-        src/pql/HandleMultipleSelect.h)
+        src/pql/HandleMultipleSelect.h
+        src/db/Parent_HelperFunctions.cpp)
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

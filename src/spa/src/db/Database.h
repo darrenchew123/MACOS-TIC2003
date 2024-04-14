@@ -6,6 +6,9 @@
 #include <optional>
 #include "sqlite3.h"
 #include "pql/Query.h"
+#include "ParentT_HelperFunctions.h"
+#include "Parent_HelperFunctions.h"
+
 
 
 using namespace std;
@@ -115,6 +118,12 @@ public:
     static bool checkParentTRelationship(string parent, string child);
 
     static bool checkModifiesRelationship(string statementCodeLine, string variableName,  optional<string> statementType);
+
+    static void prepareContext_Parent(const std::unordered_map<std::string, std::string>& declaredVariables,
+                                      const std::string& leftArg, const std::string& rightArg,
+                                      bool& isLhsSynonym, std::string& lhsSynType,
+                                      bool& isRhsSynonym, std::string& rhsSynType,
+                                      bool& ancestorExists);
 
 private:
     static sqlite3* dbConnection;

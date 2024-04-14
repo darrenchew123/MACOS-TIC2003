@@ -357,13 +357,13 @@ void Database::getUses_OutputStmt(string leftArg, string rightArg, vector<string
     else if(leftType =="stmt" || leftArg == "_"){
         getUses_OutputStmt = "SELECT DISTINCT statementCodeLine FROM Uses;";
     }
-    else if((leftType =="while" || leftType == "if") && rightType == ""){
+    else if((leftType =="while" || leftType == "if" || leftType == "print" || leftType == "read" || leftType == "assign") && rightType == ""){
         getUses_OutputStmt = "SELECT DISTINCT u.statementCodeLine "
                              "FROM Uses u "
                              "JOIN Statement s ON u.statementCodeLine = s.codeLine "
                              "WHERE u.variableName = '" + rightArg + "' ""AND s.statementType = '" + leftType + "';";
     }
-    else if(leftType =="while" || leftType == "if"){
+    else if(leftType =="while" || leftType == "if" || leftType == "print" || leftType == "read" || leftType == "assign"){
         getUses_OutputStmt = "SELECT DISTINCT u.statementCodeLine "
                              "FROM Uses u "
                              "JOIN Statement s ON u.statementCodeLine = s.codeLine "
@@ -374,46 +374,61 @@ void Database::getUses_OutputStmt(string leftArg, string rightArg, vector<string
     }
     executeAndProcessSQL(getUses_OutputStmt,results);
 }
-void Database::getUses_OutputType(string leftArg, string rightArg, vector<string>& results, Query queryToExecute) {
-    string getUses_OutputAssign;
-    string leftType = queryToExecute.declaredVariables[leftArg];
-    string rightType = queryToExecute.declaredVariables[rightArg];
-    if(rightType == "" && (leftType == "assign" || leftType == "print" || leftArg == "_") ){
-        getUses_OutputAssign = "SELECT DISTINCT Uses.statementCodeLine\n"
-                               "FROM Uses\n"
-                               "JOIN Statement s ON Uses.statementCodeLine = s.codeLine\n"
-                               "WHERE s.statementType = '" + leftType +
-                               "' AND Uses.variableName = '" + rightArg +"';";
-    }
-    else if(leftType == "assign" || leftType == "print" || leftArg == "_") {
-        getUses_OutputAssign = "SELECT DISTINCT Uses.statementCodeLine\n"
-                               "FROM Uses\n"
-                               "JOIN Statement s ON Uses.statementCodeLine = s.codeLine\n"
-                               "WHERE s.statementType = '" + leftType + "';";
-    }
-    else {
-        getUses_OutputAssign = "SELECT DISTINCT statementCodeLine FROM Uses WHERE statementCodeLine ='"
-                             + leftArg + "';";
-    }
-    cout << "getUses_OutputAssign " << getUses_OutputAssign << endl;
-    executeAndProcessSQL(getUses_OutputAssign,results);
-}
+//void Database::getUses_OutputType(string leftArg, string rightArg, vector<string>& results, Query queryToExecute) {
+//    string getUses_OutputAssign;
+//    string leftType = queryToExecute.declaredVariables[leftArg];
+//    string rightType = queryToExecute.declaredVariables[rightArg];
+//    if(rightType == "" && (leftType == "assign" || leftType == "print" || leftArg == "_") ){
+//        getUses_OutputAssign = "SELECT DISTINCT Uses.statementCodeLine\n"
+//                               "FROM Uses\n"
+//                               "JOIN Statement s ON Uses.statementCodeLine = s.codeLine\n"
+//                               "WHERE s.statementType = '" + leftType +
+//                               "' AND Uses.variableName = '" + rightArg +"';";
+//    }
+//    else if(leftType == "assign" || leftType == "print" || leftArg == "_") {
+//        getUses_OutputAssign = "SELECT DISTINCT Uses.statementCodeLine\n"
+//                               "FROM Uses\n"
+//                               "JOIN Statement s ON Uses.statementCodeLine = s.codeLine\n"
+//                               "WHERE s.statementType = '" + leftType + "';";
+//    }
+//    else {
+//        getUses_OutputAssign = "SELECT DISTINCT statementCodeLine FROM Uses WHERE statementCodeLine ='"
+//                             + leftArg + "';";
+//    }
+//    cout << "getUses_OutputAssign " << getUses_OutputAssign << endl;
+//    executeAndProcessSQL(getUses_OutputAssign,results);
+//}
 
-void Database::getUses_OutputProcedures(string leftArg, vector<string>& results, Query queryToExecute){
+void Database::getUses_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute){
     string getUses_OutputVar;
-    if(queryToExecute.declaredVariables[leftArg]=="procedure"){
+    string leftType = queryToExecute.declaredVariables[leftArg], rightType = queryToExecute.declaredVariables[rightArg];
+
+    if(leftType=="procedure" && rightType == "variable"){
         getUses_OutputVar = "SELECT DISTINCT p.procedureName\n"
                             "FROM Procedure p\n"
                             "JOIN Statement s ON p.procedureName = s.procedureName\n"
                             "JOIN Uses u ON s.codeLine = u.statementCodeLine";
-    }else {
-        cout << "lhs codeline" << endl;
+    }else if(leftType=="procedure" && rightType == ""){
+        getUses_OutputVar = "SELECT DISTINCT S.procedureName FROM Statement S\n"
+                            "JOIN Uses U ON U.statementCodeLine = S.codeLine\n"
+                            "JOIN Variable V ON U.variableName = V.variableName AND U.statementCodeLine = V.statementCodeLine\n"
+                            "WHERE V.variableName = '"
+                            +rightArg+"'";
+    }
+    else if (StringUtil::isNumeric(leftArg) && rightType == ""){
         getUses_OutputVar = "SELECT DISTINCT S.procedureName FROM Statement S\n"
                             "JOIN Uses U ON U.statementCodeLine = S.codeLine\n"
                             "JOIN Variable V ON U.variableName = V.variableName AND U.statementCodeLine = V.statementCodeLine\n"
                             "WHERE U.statementCodeLine = '"
                             +leftArg+"' AND V.variableName = '"
-                            +queryToExecute.conditions[0].rightArg+"'";
+                            +rightArg+"'";
+    }else if (leftType=="" && rightType == ""){
+        getUses_OutputVar = "SELECT DISTINCT S.procedureName FROM Statement S\n"
+                            "JOIN Uses U ON U.statementCodeLine = S.codeLine\n"
+                            "JOIN Variable V ON U.variableName = V.variableName AND U.statementCodeLine = V.statementCodeLine\n"
+                            "WHERE S.procedureName = '"
+                            +leftArg+"' AND V.variableName = '"
+                            +rightArg+"'";
     }
     executeAndProcessSQL(getUses_OutputVar,results);
 }
@@ -594,7 +609,10 @@ void Database::getCalls_OutputProcedures(string selectVar,string leftArg, string
         getCalls_OutputProceduresSQL = "SELECT procedureCallee FROM Call WHERE procedureCaller = '"
                                        + leftArg + "'; ";
     }else {
-        getCalls_OutputProceduresSQL = "SELECT procedureName FROM Procedure;";
+        getCalls_OutputProceduresSQL = "SELECT procedureName FROM Procedure WHERE EXISTS ("
+                                       "SELECT 1 FROM Call WHERE procedureCaller = '"
+                                       + leftArg + "' AND procedureCallee = '"
+                                       + rightArg + "');";
     }
     executeAndProcessSQL(getCalls_OutputProceduresSQL,results);
 }

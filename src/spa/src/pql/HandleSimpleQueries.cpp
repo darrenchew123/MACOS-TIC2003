@@ -25,7 +25,7 @@ void HandleSimpleQueries::handleProcedureSelectType(string selectVar,const strin
     if (conditionType == "Modifies") {
         Database::getModifies_OutputProcedures(rightArg, databaseResults, queryToExecute);
     } else if (conditionType == "Uses") {
-        Database::getUses_OutputProcedures(leftArg, databaseResults, queryToExecute);
+        Database::getUses_OutputProcedures(leftArg,rightArg, databaseResults, queryToExecute);
     } else if (conditionType == "Calls") {
         if (isT) {
             Database::getCallsT_OutputProcedures(selectVar, leftArg, rightArg, databaseResults, queryToExecute);
@@ -39,7 +39,7 @@ void HandleSimpleQueries::handleProcedureSelectType(string selectVar,const strin
 
 void HandleSimpleQueries::handlePrintSelectType(const string& conditionType, bool isT, const string& selectVar, const string& selectType, const string& leftArg, const string& rightArg, vector<string>& databaseResults, Query& queryToExecute) {
     if (conditionType == "Uses") {
-        Database::getUses_OutputType(leftArg, rightArg, databaseResults, queryToExecute);
+        Database::getUses_OutputStmt(leftArg, rightArg, databaseResults, queryToExecute);
     } else if (conditionType == "Parent") {
         handleParentCondition(isT, selectVar, selectType, leftArg, rightArg, databaseResults, queryToExecute);
     } else {
@@ -95,7 +95,7 @@ void HandleSimpleQueries::handleAssignSelectType(const string& conditionType, bo
     if (conditionType == "Parent") {
         handleParentCondition(isT, selectVar, selectType, leftArg, rightArg, databaseResults, queryToExecute);
     } else if (conditionType == "Uses") {
-        Database::getUses_OutputType(leftArg, rightArg, databaseResults, queryToExecute);
+        Database::getUses_OutputStmt(leftArg, rightArg, databaseResults, queryToExecute);
     } else if (patternType == "pattern") {
         Database::getPattern_OutputStmt(patternLeftArg, patternRightArg, isSubexpression, databaseResults,
                                         queryToExecute);

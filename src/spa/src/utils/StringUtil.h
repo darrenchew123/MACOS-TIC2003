@@ -9,6 +9,8 @@ using namespace std;
 class StringUtil {
 public:
     static string trim(const string& str);
-};
+    static bool isNumeric(const std::string& str);
+
+    };
 
 

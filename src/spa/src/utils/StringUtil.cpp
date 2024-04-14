@@ -9,3 +9,8 @@ string StringUtil::trim(const std::string& str) {
     size_t last = str.find_last_not_of(' ');
     return str.substr(first, (last - first + 1));
 }
+
+
+bool StringUtil::isNumeric(const std::string& str) {
+    return !str.empty() && std::all_of(str.begin(), str.end(), ::isdigit);
+}

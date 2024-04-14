@@ -7,6 +7,7 @@ void HandleMultipleConditions::processSingleSelectMultiCond(string selectVar, st
 
     // Process conditions
     for (int i = 0; i < queryToExecute.conditions.size(); ++i) {
+        cout << "how many times condition " <<endl;
         processCondition(queryToExecute.conditions[i], selectVar, selectType, patternType, patternLeftArg, patternRightArg, isSubexpression, curr, queryToExecute);
 
         if (i == 0) {
@@ -16,12 +17,19 @@ void HandleMultipleConditions::processSingleSelectMultiCond(string selectVar, st
         }
         curr.clear();
     }
+    for(auto s : results){
+        cout  << "conditions result " << s << endl;
+    }
 
     // Process patterns
     for (const auto& pattern : queryToExecute.patterns) {
+        cout << "how many times pattern " <<endl;
         processPattern(pattern, selectVar, selectType, isSubexpression, curr, queryToExecute);
         intersectResults(results, curr);
         curr.clear();
+    }
+    for(auto s : results){
+        cout  << "pattern result " << s << endl;
     }
 
     databaseResults = results;
@@ -42,7 +50,7 @@ void HandleMultipleConditions::intersectResults(vector<string>& results, vector<
 
 void HandleMultipleConditions::processCondition(Condition condition, string selectVar, string selectType, string patternType, string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& curr, Query queryToExecute) {
     cout << "processing condition\n";
-    HandleSimpleQueries::processSimpleQuery(selectVar, selectType, condition.conditionType, condition.isT, condition.leftArg, condition.rightArg, patternType, patternLeftArg, patternRightArg, isSubexpression, curr, queryToExecute);
+    HandleSimpleQueries::processSimpleQuery(selectVar, selectType, condition.conditionType, condition.isT, condition.leftArg, condition.rightArg, "", patternLeftArg, patternRightArg, isSubexpression, curr, queryToExecute);
     cout << "curr: ";
     for (const auto& a : curr) {
         cout << a << " ";

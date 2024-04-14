@@ -608,7 +608,10 @@ void Database::getCalls_OutputProcedures(string selectVar,string leftArg, string
     else if ((rightType== "procedure"|| rightArg == "_") && leftType == "" ){
         getCalls_OutputProceduresSQL = "SELECT procedureCallee FROM Call WHERE procedureCaller = '"
                                        + leftArg + "'; ";
-    }else {
+    }else if(leftType == "procedure" && rightType == "procedure"){
+        getCalls_OutputProceduresSQL = "SELECT DISTINCT procedureName FROM Procedure;";
+    }
+    else {
         getCalls_OutputProceduresSQL = "SELECT procedureName FROM Procedure WHERE EXISTS ("
                                        "SELECT 1 FROM Call WHERE procedureCaller = '"
                                        + leftArg + "' AND procedureCallee = '"

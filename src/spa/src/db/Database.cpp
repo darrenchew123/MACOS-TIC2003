@@ -231,8 +231,7 @@ void Database::getVariablesPattern(vector<string>& results,string lhsArgs ,strin
                                         + rhsArgs + "%';";
     }else{
         if (rhsArgs == "_") {
-            getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where LHSExpression like '"
-                                     + lhsArgs + "';";
+            getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern;";
         }
         else
             getVariablesPatternSQL = "select DISTINCT LHSExpression from Pattern where RHSExpression like '"
@@ -358,7 +357,18 @@ void Database::getUses_OutputStmt(string leftArg, string rightArg, vector<string
     else if(leftType =="stmt" || leftArg == "_"){
         getUses_OutputStmt = "SELECT DISTINCT statementCodeLine FROM Uses;";
     }
-    else{
+    else if((leftType =="while" || leftType == "if") && rightType == ""){
+        getUses_OutputStmt = "SELECT DISTINCT u.statementCodeLine "
+                             "FROM Uses u "
+                             "JOIN Statement s ON u.statementCodeLine = s.codeLine "
+                             "WHERE u.variableName = '" + rightArg + "' ""AND s.statementType = '" + leftType + "';";
+    }
+    else if(leftType =="while" || leftType == "if"){
+        getUses_OutputStmt = "SELECT DISTINCT u.statementCodeLine "
+                             "FROM Uses u "
+                             "JOIN Statement s ON u.statementCodeLine = s.codeLine "
+                             "WHERE s.statementType = '" + leftType + "';";
+    }else{
         getUses_OutputStmt = "SELECT DISTINCT statementCodeLine FROM Uses WHERE statementCodeLine ='"
                             + leftArg + "';";
     }

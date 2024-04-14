@@ -118,6 +118,8 @@ public:
 
     static bool checkModifiesRelationship(string statementCodeLine, string variableName, string statementType);
 
+    static bool checkUsesRelationship(string statementCodeLine, string variableName, string statementType);
+
     static void prepareContext_Parent(const std::unordered_map<std::string, std::string>& declaredVariables,
                                       const std::string& leftArg, const std::string& rightArg,
                                       bool& isLhsSynonym, std::string& lhsSynType,

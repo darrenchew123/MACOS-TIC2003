@@ -149,6 +149,9 @@ bool HandleMultipleSelect::checkRelationship(string relationshipType, string ent
     else if (relationshipType == "Modifies") {
         return Database::checkModifiesRelationship(entity1, entity2, queryToExecute.declaredVariables[condition.leftArg]);
     }
+    else if (relationshipType == "Uses") {
+        return Database::checkUsesRelationship(entity1, entity2, queryToExecute.declaredVariables[condition.leftArg]);
+    }
     return false;
 }
 

@@ -778,5 +778,25 @@ bool Database::checkModifiesRelationship(string statementCodeLine, string variab
     return executeCheckQuery(sqlQuery, params);
 }
 
+bool Database::checkUsesRelationship(string statementCodeLine, string variableName, string statementType) {
+    std::string sqlQuery = R"(
+        SELECT EXISTS(
+            SELECT 1 FROM Uses u
+            JOIN Statement s ON u.statementCodeLine = s.codeLine
+            WHERE u.statementCodeLine = ? AND u.variableName = ?
+    )";
+
+    vector<string> params = {statementCodeLine, variableName};
+
+    if (statementType!="") {
+        sqlQuery += " AND s.statementType = ?";
+        params.push_back(statementType);
+    }
+
+    sqlQuery += ")";
+
+    return executeCheckQuery(sqlQuery, params);
+}
+
 
 

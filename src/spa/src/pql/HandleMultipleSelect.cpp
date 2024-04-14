@@ -98,12 +98,27 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
             auto leftIndex = find(entityOrder.begin(), entityOrder.end(), condition.leftArg) - entityOrder.begin();
             auto rightIndex = find(entityOrder.begin(), entityOrder.end(), condition.rightArg) - entityOrder.begin();
 
-            if (checkRelationship(condition.conditionType, combo[leftIndex], combo[rightIndex], condition.isT,queryToExecute,condition)) {
+            if (checkRelationship(condition.conditionType, combo[leftIndex], combo[rightIndex], condition.isT,queryToExecute,condition, Pattern())) {
                 tempValidCombinations.push_back(combo);
             }
         }
 
         validCombinations = tempValidCombinations;
+    }
+    for (const auto& pattern : queryToExecute.patterns) {
+        vector<vector<string>> tempValidCombinations;
+
+        for (const auto& combo : validCombinations) {
+            auto leftIndex = find(entityOrder.begin(), entityOrder.end(), pattern.patternLeftArg) - entityOrder.begin();
+            auto rightIndex = find(entityOrder.begin(), entityOrder.end(), pattern.patternRightArg) - entityOrder.begin();
+
+            // Assuming checkRelationship can handle Pattern objects; adapt as necessary
+            if (checkRelationship(pattern.patternType, combo[leftIndex], combo[rightIndex], pattern.isSubexpression, queryToExecute, Condition(), pattern)) {
+                tempValidCombinations.push_back(combo);
+            }
+        }
+
+        validCombinations = tempValidCombinations; // Update valid combinations after each pattern
     }
     for (const auto& combo : validCombinations) {
         stringstream result;
@@ -115,7 +130,10 @@ void HandleMultipleSelect::postProcessConditions(unordered_map<string, pair<int,
 }
 
 
-bool HandleMultipleSelect::checkRelationship(string relationshipType, string entity1, string entity2, bool isT, Query queryToExecute, Condition condition) {
+bool HandleMultipleSelect::checkRelationship(string relationshipType, string entity1, string entity2, bool isT, Query queryToExecute, Condition condition, Pattern pattern) {
+//    if (relationshipType == "pattern") {
+//        return Database::checkCallsTRelationship(entity1, entity2);
+//    }
     if (relationshipType == "Calls" && isT) {
         return Database::checkCallsTRelationship(entity1, entity2);
     }

@@ -28,12 +28,10 @@ void HandleMultipleConditions::processSingleSelectMultiCond(string selectVar, st
 }
 void HandleMultipleConditions::intersectResults(vector<string>& results, vector<string> curr) {
     vector<string> intersection;
-    if (!curr.empty()) {
-        sort(curr.begin(), curr.end());
-        sort(results.begin(), results.end());
-        set_intersection(curr.begin(), curr.end(), results.begin(), results.end(), back_inserter(intersection));
-        results = intersection;
-    }
+    sort(curr.begin(), curr.end());
+    sort(results.begin(), results.end());
+    set_intersection(curr.begin(), curr.end(), results.begin(), results.end(), back_inserter(intersection));
+    results = intersection;
 
     cout << "results: ";
     for (const auto& a : results) {

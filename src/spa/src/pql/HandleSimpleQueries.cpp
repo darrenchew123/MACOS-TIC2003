@@ -2,7 +2,7 @@
 
 void HandleSimpleQueries::processSimpleQuery(string selectVar, string selectType, string conditionType, bool isT, string leftArg, string rightArg, string patternType, string patternLeftArg, string patternRightArg, bool isSubexpression, vector<string>& databaseResults, Query queryToExecute) {
     if (selectType == "procedure") {
-        handleProcedureSelectType(conditionType, isT, leftArg, rightArg, databaseResults, queryToExecute);
+        handleProcedureSelectType(selectVar, conditionType, isT, leftArg, rightArg, databaseResults, queryToExecute);
     } else if (selectType == "print") {
         handlePrintSelectType(conditionType, isT, selectVar, selectType, leftArg, rightArg, databaseResults, queryToExecute);
     }else if (selectType == "variable") {
@@ -20,16 +20,17 @@ void HandleSimpleQueries::processSimpleQuery(string selectVar, string selectType
     }
 }
 
-void HandleSimpleQueries::handleProcedureSelectType(const string& conditionType, bool isT, const string& leftArg, const string& rightArg, vector<string>& databaseResults, Query& queryToExecute) {
+void HandleSimpleQueries::handleProcedureSelectType(string selectVar,const string& conditionType, bool isT, const string& leftArg, const string& rightArg, vector<string>& databaseResults, Query& queryToExecute) {
+    cout <<"Condition type " << conditionType << endl;
     if (conditionType == "Modifies") {
         Database::getModifies_OutputProcedures(rightArg, databaseResults, queryToExecute);
     } else if (conditionType == "Uses") {
         Database::getUses_OutputProcedures(leftArg, databaseResults, queryToExecute);
     } else if (conditionType == "Calls") {
         if (isT) {
-            Database::getCallsT_OutputProcedures(leftArg, rightArg, databaseResults, queryToExecute);
+            Database::getCallsT_OutputProcedures(selectVar, leftArg, rightArg, databaseResults, queryToExecute);
         } else {
-            Database::getCalls_OutputProcedures(leftArg, rightArg, databaseResults, queryToExecute);
+            Database::getCalls_OutputProcedures(selectVar, leftArg, rightArg, databaseResults, queryToExecute);
         }
     } else {
         Database::getProcedures(databaseResults);

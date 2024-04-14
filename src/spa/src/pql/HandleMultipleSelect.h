@@ -20,7 +20,7 @@ public:
 
     static void postProcessConditions(unordered_map<string, pair<int, vector<string>>> resultsMap, vector<string>& combinedResults, const Query& queryToExecute);
 
-    static bool checkRelationship(string relationshipType, string entity1, string entity2, bool isT, Query queryToExecute, Condition condition);
+    static bool checkRelationship(string relationshipType, string entity1, string entity2, bool isT, Query queryToExecute, Condition condition, Pattern pattern);
 
     static void generateCombinations(unordered_map<string, pair<int, vector<string>>> resultsMap, vector<string>& entityOrder, int index, vector<string>& current, vector<vector<string>>& allCombinations);
 

@@ -566,45 +566,48 @@ void Database::getCombo_Modifies_Pattern_OutputVar(string res, vector<string>& r
     executeAndProcessSQL(getCombo_Modifies_Pattern_OutputVarSQL,results);
 }
 
-void Database::getCalls_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute){
+void Database::getCalls_OutputProcedures(string selectVar,string leftArg, string rightArg, vector<string>& results, Query queryToExecute){
     string getCalls_OutputProceduresSQL;
     string leftType = queryToExecute.declaredVariables[leftArg];
     string rightType = queryToExecute.declaredVariables[rightArg];
-    if(leftType == "procedure" && rightArg == "_"){
+    if(leftType == "procedure" && rightArg == "_" || leftType == "procedure" && rightType == "procedure" && selectVar == leftArg){
         getCalls_OutputProceduresSQL = "SELECT DISTINCT procedureCaller FROM Call;";
     }
-    else if(rightType == "procedure" && leftArg == "_"){
+    else if(rightType == "procedure" && leftArg == "_"|| leftType == "procedure" && rightType == "procedure" && selectVar == rightArg){
         getCalls_OutputProceduresSQL = "SELECT procedureCallee FROM Call;";
     }
-    else if(leftType == "procedure" || leftArg == "_"){
+    else if((leftType == "procedure" || leftArg == "_") && rightType == ""){
         getCalls_OutputProceduresSQL = "SELECT DISTINCT procedureCaller FROM Call WHERE procedureCallee = '"
                                               + rightArg + "'; ";
     }
-    else if (rightType== "procedure"|| rightArg == "_" ){
+    else if ((rightType== "procedure"|| rightArg == "_") && leftType == "" ){
         getCalls_OutputProceduresSQL = "SELECT procedureCallee FROM Call WHERE procedureCaller = '"
                                        + leftArg + "'; ";
+    }else {
+        getCalls_OutputProceduresSQL = "SELECT procedureName FROM Procedure;";
     }
     executeAndProcessSQL(getCalls_OutputProceduresSQL,results);
 }
 
-void Database::getCallsT_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute){
+void Database::getCallsT_OutputProcedures(string selectVar,string leftArg, string rightArg, vector<string>& results, Query queryToExecute){
     string getCallsT_OutputProceduresSQL;
     string leftType = queryToExecute.declaredVariables[leftArg];
     string rightType = queryToExecute.declaredVariables[rightArg];
-    if(leftType == "procedure" && rightArg == "_"){
-        getCallsT_OutputProceduresSQL = "SELECT DISTINCT procedureCaller FROM CallT WHERE procedureCallee = '"
-                                        + rightArg + "'; ";
+    if(leftType == "procedure" && rightArg == "_" || leftType == "procedure" && rightType == "procedure" && selectVar == leftArg){
+        getCallsT_OutputProceduresSQL = "SELECT DISTINCT procedureCaller FROM CallT";
     }
-    else if(rightType == "procedure" && leftArg == "_"){
+    else if(rightType == "procedure" && leftArg == "_"|| leftType == "procedure" && rightType == "procedure" && selectVar == rightArg){
         getCallsT_OutputProceduresSQL = "SELECT procedureCallee FROM CallT;";
     }
-    else if(leftType == "procedure" || leftArg == "_"){
+    else if((leftType == "procedure" || leftArg == "_") && rightType == ""){
         getCallsT_OutputProceduresSQL = "SELECT procedureCaller FROM CallT WHERE procedureCallee = '"
                                        + rightArg + "'; ";
     }
-    else if (rightType== "procedure" || rightArg == "_" ){
+    else if ((rightType== "procedure"|| rightArg == "_") && leftType == "" ){
         getCallsT_OutputProceduresSQL = "SELECT procedureCallee FROM CallT WHERE procedureCaller = '"
                                        + leftArg + "'; ";
+    } else {
+        getCallsT_OutputProceduresSQL = "SELECT procedureName FROM Procedure;";
     }
     executeAndProcessSQL(getCallsT_OutputProceduresSQL,results);
 }

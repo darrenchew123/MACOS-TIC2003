@@ -98,9 +98,9 @@ public:
 
     static void getUses_OutputType(string leftArg, string rightArg,vector<string>& results, Query queryToExecute);
 
-    static void getCalls_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute);
+    static void getCalls_OutputProcedures(string selectVar,string leftArg, string rightArg, vector<string>& results, Query queryToExecute);
 
-    static void getCallsT_OutputProcedures(string leftArg, string rightArg, vector<string>& results, Query queryToExecute);
+    static void getCallsT_OutputProcedures(string selectVar,string leftArg, string rightArg, vector<string>& results, Query queryToExecute);
 
     static void getParent(string selectVar, string selectType, string leftArg, string rightArg, vector<string>& results, Query query);
 
